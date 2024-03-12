@@ -20,4 +20,9 @@ public class MenuCategoryService {
     public List<MenuCategory> getAllMenuCategories() {
         return (List<MenuCategory>) menuCategoryRepository.findAll();
     }
+
+//    public MenuCategory createMenuCategories(MenuCategory categoryName) {
+//
+//
+//    }
 }

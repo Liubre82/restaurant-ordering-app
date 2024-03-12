@@ -1,11 +1,9 @@
 package com.restaurant.restaurantorderingapp.models.food;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
-@Entity(name = "food_sizes")
+@Entity
+@Table(name = "food_sizes")
 public class FoodSize {
 
     @Id

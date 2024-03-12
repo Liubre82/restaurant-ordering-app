@@ -2,7 +2,8 @@ package com.restaurant.restaurantorderingapp.models.user;
 
 import jakarta.persistence.*;
 
-@Entity(name = "user_addresses")
+@Entity
+@Table(name = "user_addresses")
 public class UserAddress {
 
     @Id

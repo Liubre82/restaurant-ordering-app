@@ -3,7 +3,8 @@ package com.restaurant.restaurantorderingapp.models.user;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
 
-@Entity(name = "user_restaurant_reviews")
+@Entity
+@Table(name = "user_restaurant_reviews")
 public class UserRestaurantReview {
 
     @Id

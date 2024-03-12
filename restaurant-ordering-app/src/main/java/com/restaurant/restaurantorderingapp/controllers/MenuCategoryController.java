@@ -24,9 +24,17 @@ public class MenuCategoryController {
     }
 
     //curl -s http://localhost:8080/api/menuCategories/ | sed -e 's/{/\n&/g'
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<MenuCategory>> getMenuCategories() {
         List<MenuCategory> menuCategories = menuCategoryService.getAllMenuCategories();
         return new ResponseEntity<>(menuCategories, HttpStatus.OK);
     }
+//
+//    @PostMapping
+//    public String createMenuCategory(
+//            @RequestBody MenuCategoryDTO menuCategoryDTO
+//            ) {
+//
+//    }
+
 }
