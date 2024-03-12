@@ -1,4 +1,4 @@
-package com.restaurant.restaurantorderingapp.models.dto;
+package com.restaurant.restaurantorderingapp.dto;
 
 public class UserDTO {
 

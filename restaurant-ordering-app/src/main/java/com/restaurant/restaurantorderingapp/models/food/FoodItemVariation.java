@@ -13,7 +13,7 @@ public class FoodItemVariation {
 
     @ManyToOne
     @JoinColumn(name = "food_item_id")
-    private String foodItemId;
+    private FoodItem foodItem;
 
     private Long foodSizeId;
 
@@ -23,12 +23,12 @@ public class FoodItemVariation {
         return foodItemVariationId;
     }
 
-    public String getFoodItemId() {
-        return foodItemId;
+    public FoodItem getFoodItem() {
+        return foodItem;
     }
 
-    public void setFoodItemId(String foodItemId) {
-        this.foodItemId = foodItemId;
+    public void setFoodItem(FoodItem foodItem) {
+        this.foodItem = foodItem;
     }
 
     public Long getFoodSizeId() {
