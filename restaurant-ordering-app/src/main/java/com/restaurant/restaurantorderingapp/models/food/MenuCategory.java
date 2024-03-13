@@ -10,17 +10,17 @@ public class MenuCategory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long menuCategoryId;
 
-    private String categoryName;
+    private String menuCategoryName;
 
     public Long getMenuCategoryId() {
         return menuCategoryId;
     }
 
-    public String getCategoryName() {
-        return categoryName;
+    public String getMenuCategoryName() {
+        return menuCategoryName;
     }
 
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
+    public void setCategoryName(String menuCategoryName) {
+        this.menuCategoryName = menuCategoryName;
     }
 }
