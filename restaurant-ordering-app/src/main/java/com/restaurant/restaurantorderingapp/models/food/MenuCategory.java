@@ -8,8 +8,10 @@ public class MenuCategory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "menu_category_id")
     private Long menuCategoryId;
 
+    @Column(name = "menu_category_name")
     private String menuCategoryName;
 
     public Long getMenuCategoryId() {
