@@ -1,6 +1,8 @@
 package com.restaurant.restaurantorderingapp.models.food;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "menu_categories")
@@ -11,6 +13,8 @@ public class MenuCategory {
     @Column(name = "menu_category_id")
     private Long menuCategoryId;
 
+    @NotBlank
+    @NotNull
     @Column(name = "menu_category_name")
     private String menuCategoryName;
 

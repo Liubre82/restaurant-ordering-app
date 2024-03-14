@@ -1,6 +1,6 @@
 package com.restaurant.restaurantorderingapp.controllers;
 
-import com.restaurant.restaurantorderingapp.dto.menuCategoriesDto.CreateUpdateMenuCategoryDTO;
+import com.restaurant.restaurantorderingapp.dto.menuCategoriesDto.CreateMenuCategoryDTO;
 import com.restaurant.restaurantorderingapp.dto.menuCategoriesDto.MenuCategoryDTO;
 import com.restaurant.restaurantorderingapp.services.MenuCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,43 +16,49 @@ public class MenuCategoryController {
 
     private final MenuCategoryService menuCategoryService;
 
-
     @Autowired
     public MenuCategoryController(MenuCategoryService menuCategoryService) {
         this.menuCategoryService = menuCategoryService;
     }
 
-    //curl -i -s http://localhost:8080/api/menuCategories | sed -e 's/{/\n&/g'
+
+    // curl -i -s http://localhost:8080/api/menuCategories | sed -e 's/{/\n&/g'
     @GetMapping
     public ResponseEntity<List<MenuCategoryDTO>> getMenuCategories() {
         List<MenuCategoryDTO> menuCategories = menuCategoryService.getAllMenuCategories();
-        return new ResponseEntity<>(menuCategories, HttpStatus.OK);
+        return ResponseEntity.ok(menuCategories);
+    }
+
+    @GetMapping("/{menuCategoryId}")
+    public ResponseEntity<MenuCategoryDTO> getMenuCategory(@PathVariable Long menuCategoryId) {
+        MenuCategoryDTO menuCategoryDTO = menuCategoryService.getMenuCategoryById(menuCategoryId);
+        return ResponseEntity.ok(menuCategoryDTO);
     }
 
     // curl -i -X POST -H "Content-Type: application/json" -d '{"menuCategoryName": "JiajinCategory"}' http://localhost:8080/api/menuCategories
     @PostMapping
-    public String createMenuCategory(
-            @RequestBody CreateUpdateMenuCategoryDTO createUpdateMenuCategoryDTO
+    public ResponseEntity<String> createMenuCategory(
+            @RequestBody CreateMenuCategoryDTO CreateMenuCategoryDTO
             ) {
-        return menuCategoryService.createMenuCategories(createUpdateMenuCategoryDTO).getMenuCategoryName();
+        menuCategoryService.createMenuCategories(CreateMenuCategoryDTO);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body("Menu Category created successfully.");
     }
 
     // curl -i -X DELETE http://localhost:8080/api/menuCategories/7
     @DeleteMapping("/{menuCategoryId}")
-    public ResponseEntity<Void> deleteMenuCategory(@PathVariable Long menuCategoryId) {
-        boolean deleted = menuCategoryService.deleteMenuCategory(menuCategoryId);
-        if (deleted) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<String> deleteMenuCategory(@PathVariable Long menuCategoryId) {
+        menuCategoryService.deleteMenuCategory(menuCategoryId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body("Menu Category deleted successfully.");
     }
 
-//    @PutMapping("/{menuCategoryId}")
-//    public ResponseEntity<> updateMenuCategory() {
-//
-//        return ResponseEntity
-//                .ok();
-//    }
+    @PutMapping("/{menuCategoryId}")
+    public ResponseEntity<MenuCategoryDTO> updateMenuCategory(@PathVariable Long menuCategoryId) {
+        MenuCategoryDTO menuCategoryDTO = menuCategoryService.updateMenuCategory(menuCategoryId);
+        return ResponseEntity.ok(menuCategoryDTO);
+    }
 
 }

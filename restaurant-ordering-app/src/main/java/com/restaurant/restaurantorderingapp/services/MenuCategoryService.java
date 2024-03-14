@@ -1,14 +1,15 @@
 package com.restaurant.restaurantorderingapp.services;
 
-import com.restaurant.restaurantorderingapp.dto.menuCategoriesDto.CreateUpdateMenuCategoryDTO;
+import com.restaurant.restaurantorderingapp.dto.menuCategoriesDto.CreateMenuCategoryDTO;
 import com.restaurant.restaurantorderingapp.dto.menuCategoriesDto.MenuCategoryDTO;
+import com.restaurant.restaurantorderingapp.exceptions.customExceptions.DuplicateKeyException;
+import com.restaurant.restaurantorderingapp.exceptions.customExceptions.NotFoundException;
 import com.restaurant.restaurantorderingapp.models.food.MenuCategory;
 import com.restaurant.restaurantorderingapp.repositories.MenuCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,12 +31,28 @@ public class MenuCategoryService {
     }
 
     //convert CreateMenuCategory DTO obj to entity obj
-    public MenuCategory fromDTOToEntity(CreateUpdateMenuCategoryDTO createUpdateMenuCategoryDTO) {
+    public MenuCategory fromDTOToEntity(CreateMenuCategoryDTO CreateMenuCategoryDTO) {
         MenuCategory menuCategory = new MenuCategory();
-        menuCategory.setCategoryName(createUpdateMenuCategoryDTO.menuCategoryName());
+        menuCategory.setCategoryName(CreateMenuCategoryDTO.menuCategoryName());
         return menuCategory;
     }
 
+    public MenuCategory fromDTOToEntity(MenuCategoryDTO menuCategoryDTO) {
+        MenuCategory menuCategory = new MenuCategory();
+        menuCategory.setCategoryName(menuCategoryDTO.menuCategoryName());
+        return menuCategory;
+    }
+
+    public MenuCategory findMenuCategoryById(Long menuCategoryId) {
+        return menuCategoryRepository.findById(menuCategoryId)
+                .orElseThrow(() -> new NotFoundException("Menu Category", menuCategoryId));
+    }
+
+    public MenuCategoryDTO getMenuCategoryById(Long menuCategoryId) {
+        MenuCategory menuCategory = findMenuCategoryById(menuCategoryId);
+        MenuCategoryDTO menuCategoryDTO = fromEntityToDTO(menuCategory);
+        return  menuCategoryDTO;
+    }
 
     /* Retrieve all entities from menu_categories table then pass it into a
      * stream to be converted into DTOs and return it in a List*/
@@ -46,23 +63,23 @@ public class MenuCategoryService {
                 .collect(Collectors.toList());
     }
 
-    public MenuCategory createMenuCategories(CreateUpdateMenuCategoryDTO createMenuCategoryDTO) {
+    public void createMenuCategories(CreateMenuCategoryDTO createMenuCategoryDTO) {
+        boolean categoryNameCheck = menuCategoryRepository.existsByMenuCategoryName(createMenuCategoryDTO.menuCategoryName());
+        if(categoryNameCheck) throw new DuplicateKeyException(createMenuCategoryDTO.menuCategoryName());
         MenuCategory menuCategory = fromDTOToEntity(createMenuCategoryDTO);
         menuCategoryRepository.save(menuCategory);
-        return menuCategory;
     }
 
-    public boolean deleteMenuCategory(Long menuCategoryId) {
-        Optional<MenuCategory> menuCategory = menuCategoryRepository.findById(menuCategoryId);
-        if(menuCategory.isEmpty()) {
-            return false;
-        } else {
-            menuCategoryRepository.deleteById(menuCategoryId);
-            return true;
-        }
+    public void deleteMenuCategory(Long menuCategoryId) throws NotFoundException {
+        boolean menuCategoryExist = menuCategoryRepository.existsById(menuCategoryId);
+        if(!menuCategoryExist) throw new NotFoundException("Menu Category", menuCategoryId);
+        menuCategoryRepository.deleteById(menuCategoryId);
     }
 
-//    public MenuCategory updateMenuCategory(Long menuCategoryId) {
-//        menuCategoryRepository.
-//    }
+    public MenuCategoryDTO updateMenuCategory(Long menuCategoryId) {
+        MenuCategory menuCategory = findMenuCategoryById(menuCategoryId);
+        menuCategoryRepository.save(menuCategory);
+        MenuCategoryDTO menuCategoryDTOUpdated = fromEntityToDTO(menuCategory);
+        return menuCategoryDTOUpdated;
+    }
 }
