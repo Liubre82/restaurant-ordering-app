@@ -2,6 +2,7 @@ package com.restaurant.restaurantorderingapp.controllers;
 
 import com.restaurant.restaurantorderingapp.dto.menuCategoriesDto.CreateMenuCategoryDTO;
 import com.restaurant.restaurantorderingapp.dto.menuCategoriesDto.MenuCategoryDTO;
+import com.restaurant.restaurantorderingapp.dto.menuCategoriesDto.UpdateMenuCategoryDTO;
 import com.restaurant.restaurantorderingapp.services.MenuCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -56,8 +57,8 @@ public class MenuCategoryController {
     }
 
     @PutMapping("/{menuCategoryId}")
-    public ResponseEntity<MenuCategoryDTO> updateMenuCategory(@PathVariable Long menuCategoryId) {
-        MenuCategoryDTO menuCategoryDTO = menuCategoryService.updateMenuCategory(menuCategoryId);
+    public ResponseEntity<MenuCategoryDTO> updateMenuCategory(@PathVariable Long menuCategoryId, @RequestBody UpdateMenuCategoryDTO updateMenuCategoryDTO) {
+        MenuCategoryDTO menuCategoryDTO = menuCategoryService.updateMenuCategory(menuCategoryId, updateMenuCategoryDTO);
         return ResponseEntity.ok(menuCategoryDTO);
     }
 

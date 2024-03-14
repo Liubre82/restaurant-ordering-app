@@ -2,7 +2,9 @@ package com.restaurant.restaurantorderingapp.services;
 
 import com.restaurant.restaurantorderingapp.dto.menuCategoriesDto.CreateMenuCategoryDTO;
 import com.restaurant.restaurantorderingapp.dto.menuCategoriesDto.MenuCategoryDTO;
+import com.restaurant.restaurantorderingapp.dto.menuCategoriesDto.UpdateMenuCategoryDTO;
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.DuplicateKeyException;
+import com.restaurant.restaurantorderingapp.exceptions.customExceptions.EmptyResultException;
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.NotFoundException;
 import com.restaurant.restaurantorderingapp.models.food.MenuCategory;
 import com.restaurant.restaurantorderingapp.repositories.MenuCategoryRepository;
@@ -37,12 +39,6 @@ public class MenuCategoryService {
         return menuCategory;
     }
 
-    public MenuCategory fromDTOToEntity(MenuCategoryDTO menuCategoryDTO) {
-        MenuCategory menuCategory = new MenuCategory();
-        menuCategory.setCategoryName(menuCategoryDTO.menuCategoryName());
-        return menuCategory;
-    }
-
     public MenuCategory findMenuCategoryById(Long menuCategoryId) {
         return menuCategoryRepository.findById(menuCategoryId)
                 .orElseThrow(() -> new NotFoundException("Menu Category", menuCategoryId));
@@ -58,6 +54,7 @@ public class MenuCategoryService {
      * stream to be converted into DTOs and return it in a List*/
     public List<MenuCategoryDTO> getAllMenuCategories() {
         List<MenuCategory> menuCategories = (List<MenuCategory>) menuCategoryRepository.findAll();
+        if(menuCategories.isEmpty()) throw new EmptyResultException("menu categories");
         return menuCategories.stream()
                 .map(this::fromEntityToDTO) //entity -> fromEntityToDTO(entity)
                 .collect(Collectors.toList());
@@ -76,8 +73,9 @@ public class MenuCategoryService {
         menuCategoryRepository.deleteById(menuCategoryId);
     }
 
-    public MenuCategoryDTO updateMenuCategory(Long menuCategoryId) {
+    public MenuCategoryDTO updateMenuCategory(Long menuCategoryId, UpdateMenuCategoryDTO updateMenuCategoryDTO) {
         MenuCategory menuCategory = findMenuCategoryById(menuCategoryId);
+        menuCategory.setCategoryName(updateMenuCategoryDTO.menuCategoryName());
         menuCategoryRepository.save(menuCategory);
         MenuCategoryDTO menuCategoryDTOUpdated = fromEntityToDTO(menuCategory);
         return menuCategoryDTOUpdated;
