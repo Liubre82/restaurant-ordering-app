@@ -4,6 +4,7 @@ import com.restaurant.restaurantorderingapp.dto.menuCategoriesDto.CreateMenuCate
 import com.restaurant.restaurantorderingapp.dto.menuCategoriesDto.MenuCategoryDTO;
 import com.restaurant.restaurantorderingapp.dto.menuCategoriesDto.UpdateMenuCategoryDTO;
 import com.restaurant.restaurantorderingapp.services.MenuCategoryService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +40,7 @@ public class MenuCategoryController {
     // curl -i -X POST -H "Content-Type: application/json" -d '{"menuCategoryName": "JiajinCategory"}' http://localhost:8080/api/menuCategories
     @PostMapping
     public ResponseEntity<String> createMenuCategory(
-            @RequestBody CreateMenuCategoryDTO CreateMenuCategoryDTO
+            @RequestBody @Valid CreateMenuCategoryDTO CreateMenuCategoryDTO
             ) {
         menuCategoryService.createMenuCategories(CreateMenuCategoryDTO);
         return ResponseEntity
