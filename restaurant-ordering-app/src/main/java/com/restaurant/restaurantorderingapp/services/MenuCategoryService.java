@@ -4,7 +4,7 @@ import com.restaurant.restaurantorderingapp.dto.menuCategoriesDto.CreateMenuCate
 import com.restaurant.restaurantorderingapp.dto.menuCategoriesDto.MenuCategoryDTO;
 import com.restaurant.restaurantorderingapp.dto.menuCategoriesDto.UpdateMenuCategoryDTO;
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.DuplicateKeyException;
-import com.restaurant.restaurantorderingapp.exceptions.customExceptions.EmptyResultException;
+import com.restaurant.restaurantorderingapp.exceptions.customExceptions.EmptyDataTableException;
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.NotFoundException;
 import com.restaurant.restaurantorderingapp.models.food.MenuCategory;
 import com.restaurant.restaurantorderingapp.repositories.MenuCategoryRepository;
@@ -53,8 +53,9 @@ public class MenuCategoryService {
     /* Retrieve all entities from menu_categories table then pass it into a
      * stream to be converted into DTOs and return it in a List*/
     public List<MenuCategoryDTO> getAllMenuCategories() {
+        String entityName = "menu categories";
         List<MenuCategory> menuCategories = (List<MenuCategory>) menuCategoryRepository.findAll();
-        if(menuCategories.isEmpty()) throw new EmptyResultException("menu categories");
+        if(menuCategories.isEmpty()) throw new EmptyDataTableException(entityName);
         return menuCategories.stream()
                 .map(this::fromEntityToDTO) //entity -> fromEntityToDTO(entity)
                 .collect(Collectors.toList());

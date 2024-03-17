@@ -1,7 +1,7 @@
 package com.restaurant.restaurantorderingapp.exceptions.exceptionHandlers;
 
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.DuplicateKeyException;
-import com.restaurant.restaurantorderingapp.exceptions.customExceptions.EmptyResultException;
+import com.restaurant.restaurantorderingapp.exceptions.customExceptions.EmptyDataTableException;
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.NotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -31,13 +31,13 @@ public class GlobalExceptionHandler {
                 .body(errorResponse);
     }
 
-    @ExceptionHandler(EmptyResultException.class)
-    public ResponseEntity<Map<String, String>> handleEmptyResultException(EmptyResultException e) {
+    @ExceptionHandler(EmptyDataTableException.class)
+    public ResponseEntity<Map<String, String>> handleEmptyResultException(EmptyDataTableException e) {
         HttpStatus statusCode = HttpStatus.NOT_FOUND;
         Map<String, String> errorResponse = new LinkedHashMap<>();
         errorResponse.put("status code", String.valueOf(statusCode.value()));
         errorResponse.put("message", e.getMessage());
-        log.error("NotFoundException", errorResponse);
+        log.error("EmptyDataTableException", errorResponse);
         return ResponseEntity
                 .status(statusCode)
                 .body(errorResponse);
