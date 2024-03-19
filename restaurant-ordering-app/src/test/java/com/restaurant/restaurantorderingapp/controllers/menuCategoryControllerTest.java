@@ -23,26 +23,25 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @WebMvcTest(MenuCategoryController.class)
 public class menuCategoryControllerTest extends BaseControllerTest{
 
     private static final String END_POINT_PATH = "/menuCategories";
-
+    private static final String tableName = "menu categories";
+    private static final String entityName = "Menu Category";
     @Autowired
     private ObjectMapper objectMapper;
     @MockBean
     private MenuCategoryService menuCategoryService;
-
     private MenuCategoryDTO menuCategoryTestEntity1;
-
     private MenuCategoryDTO menuCategoryTestEntity2;
-
-    private List<MenuCategoryDTO> menuCategoryTestEntityList = new ArrayList<MenuCategoryDTO>();
+    private static final List<MenuCategoryDTO> menuCategoryTestEntityList = new ArrayList<>();
 
     @BeforeEach
     public void setUp() {
@@ -73,26 +72,20 @@ public class menuCategoryControllerTest extends BaseControllerTest{
 
         /* MethodArgumentNotValidException is thrown at the controller layer, so this test should
         not interact with any code in the controller and any in the service layer. */
-        verifyZeroInteractions(menuCategoryService);
+        verifyNoInteractions(menuCategoryService);
         verify(menuCategoryService, never()).createMenuCategories(any());
     }
 
     @Test
-    @DisplayName("Duplicate Menu Category Error Handling: : Create a menu category that already exist.")
+    @DisplayName("Duplicate Menu Category Error Handling: Create a menu category that already exist.")
     public void testCreateMenuCategoryDuplicateError() throws Exception {
-        String statusCode = String.valueOf(HttpStatus.CONFLICT.value());
+
         String duplicateName = "Appetizer";
         CreateMenuCategoryDTO createMenuCategoryDTO = new CreateMenuCategoryDTO(duplicateName);
         String requestBody = objectMapper.writeValueAsString(createMenuCategoryDTO);
 
         doThrow(new DuplicateKeyException(duplicateName)).when(menuCategoryService).createMenuCategories(createMenuCategoryDTO);
-        mockMvc.perform(post(END_POINT_PATH)
-                        .contentType("application/json")
-                        .content(requestBody))
-                .andDo(print())
-                .andExpect(status().isConflict())
-                .andExpect(jsonPath("$['status code']", is(statusCode)))
-                .andExpect(jsonPath("$['message']", is("entity must be unique, create UNSUCCESSFUL! duplicate entry: " + duplicateName)));;
+        duplicateKeyExceptionTest(END_POINT_PATH, requestBody, duplicateName);
         verify(menuCategoryService).createMenuCategories(createMenuCategoryDTO);
     }
 
@@ -103,11 +96,7 @@ public class menuCategoryControllerTest extends BaseControllerTest{
         String requestBody = objectMapper.writeValueAsString(createMenuCategoryDTO);
 
         doNothing().when(menuCategoryService).createMenuCategories(createMenuCategoryDTO);
-        mockMvc.perform(post(END_POINT_PATH)
-                        .contentType("application/json")
-                        .content(requestBody))
-                .andDo(print())
-                .andExpect(status().isCreated());
+        createRequestSuccessTest(END_POINT_PATH, requestBody);
         verify(menuCategoryService).createMenuCategories(createMenuCategoryDTO);
     }
 
@@ -120,17 +109,14 @@ public class menuCategoryControllerTest extends BaseControllerTest{
 
         when(menuCategoryService.getMenuCategoryById(menuCategoryId))
                 .thenReturn(menuCategoryTestEntity1);
-        mockMvc.perform(get(requestURI))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().json(responseBody));
+        getRequestSuccessTest(requestURI, responseBody);
+        verify(menuCategoryService).getMenuCategoryById(menuCategoryId);
     }
 
     @Test
     @DisplayName("Not Found Error Handler: find menu category with an unknown Id.")
     public void testGetMenuCategoryNotFoundError() throws Exception {
         Long menuCategoryId = 1255624L;
-        String entityName = "Menu Category";
         String requestURI = requestURIBuilder(END_POINT_PATH, menuCategoryId);
 
         /* Our getMenuCategoryById should throw a NotFoundException with a custom msg, so here we
@@ -146,27 +132,22 @@ public class menuCategoryControllerTest extends BaseControllerTest{
         String responseBody = objectMapper.writeValueAsString(menuCategoryTestEntityList);
 
         when(menuCategoryService.getAllMenuCategories()).thenReturn(menuCategoryTestEntityList);
-        mockMvc.perform(get(END_POINT_PATH))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().json(responseBody));
+        getRequestSuccessTest(END_POINT_PATH, responseBody);
+        verify(menuCategoryService).getAllMenuCategories();
     }
 
     @Test
     @DisplayName("Empty Data-table Error Handler: GET ALL menu categories when there are no menu categories.")
     public void testGetMenuCategoriesEmptyDataTableError() throws Exception {
-        String entityName = "menu categories";
-        when(menuCategoryService.getAllMenuCategories()).thenThrow(new EmptyDataTableException(entityName));
-        mockMvc.perform(get(END_POINT_PATH))
-                .andDo(print())
-                .andExpect(status().isNotFound());
+        String statusCode = String.valueOf(HttpStatus.NOT_FOUND.value());
+        when(menuCategoryService.getAllMenuCategories()).thenThrow(new EmptyDataTableException(tableName));
+        emptyDataTableExceptionTest(END_POINT_PATH, statusCode, tableName);
         verify(menuCategoryService).getAllMenuCategories();
     }
 
     @Test
     @DisplayName("Not Found Error Handler: UPDATE a menu category that does not exist")
     public void testUpdateMenuCategoryNotFoundError() throws Exception {
-        String entityName = "Menu Category";
         Long menuCategoryId = 10432L;
         String requestURI = requestURIBuilder(END_POINT_PATH, menuCategoryId);
 
@@ -194,13 +175,9 @@ public class menuCategoryControllerTest extends BaseControllerTest{
         String responseBody = objectMapper.writeValueAsString(updatedMenuCategoryDTO);
 
         when(menuCategoryService.updateMenuCategory(menuCategoryId, updateMenuCategoryDTO)).thenReturn(updatedMenuCategoryDTO);
-        mockMvc.perform(put(requestURI)
-                        .contentType("application/json")
-                        .content(requestBody))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().json(responseBody));
+        updateRequestSuccessTest(requestURI, requestBody, responseBody);
         verify(menuCategoryService).updateMenuCategory(menuCategoryId, updateMenuCategoryDTO);
+
     }
 
     @Test
@@ -210,10 +187,7 @@ public class menuCategoryControllerTest extends BaseControllerTest{
         String requestURI = requestURIBuilder(END_POINT_PATH, menuCategoryId);
 
         doNothing().when(menuCategoryService).deleteMenuCategory(menuCategoryId);
-        mockMvc.perform(delete(requestURI))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string("Menu Category deleted successfully."));
+        deleteRequestSuccessTest(requestURI, entityName);
         verify(menuCategoryService).deleteMenuCategory(menuCategoryId);
     }
 
@@ -222,7 +196,6 @@ public class menuCategoryControllerTest extends BaseControllerTest{
     public void testDeleteMenuCategoryNotFoundError() throws Exception {
         Long menuCategoryId = 102L;
         String requestURI = requestURIBuilder(END_POINT_PATH, menuCategoryId);
-        String entityName = "Menu Category";
 
         doThrow(new NotFoundException(entityName, menuCategoryId))
                 .when(menuCategoryService).deleteMenuCategory(menuCategoryId);

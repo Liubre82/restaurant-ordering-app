@@ -31,6 +31,14 @@ public class MenuCategoryController {
         return ResponseEntity.ok(menuCategories);
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<MenuCategoryDTO>> searchMenuCategories(
+            @RequestParam String searchInput
+    ) {
+        List<MenuCategoryDTO> menuCategories = menuCategoryService.searchMenuCategories(searchInput);
+        return menuCategories.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(menuCategories);
+    }
+
     @GetMapping("/{menuCategoryId}")
     public ResponseEntity<MenuCategoryDTO> getMenuCategory(@PathVariable Long menuCategoryId) {
         MenuCategoryDTO menuCategoryDTO = menuCategoryService.getMenuCategoryById(menuCategoryId);

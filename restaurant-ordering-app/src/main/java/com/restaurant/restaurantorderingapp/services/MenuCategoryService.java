@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class MenuCategoryService {
@@ -80,5 +81,16 @@ public class MenuCategoryService {
         menuCategoryRepository.save(menuCategory);
         MenuCategoryDTO menuCategoryDTOUpdated = fromEntityToDTO(menuCategory);
         return menuCategoryDTOUpdated;
+    }
+
+    public List<MenuCategoryDTO> searchMenuCategories(String searchInput) {
+        Iterable<MenuCategory> menuCategoriesIterable = menuCategoryRepository.findByFieldNameLike(searchInput);
+        if(!menuCategoriesIterable.iterator().hasNext()) {
+            return null;
+        }
+        List<MenuCategoryDTO> menuCategories = StreamSupport.stream(menuCategoriesIterable.spliterator(), false)
+                .map(this::fromEntityToDTO)
+                .collect(Collectors.toList());
+        return menuCategories;
     }
 }
