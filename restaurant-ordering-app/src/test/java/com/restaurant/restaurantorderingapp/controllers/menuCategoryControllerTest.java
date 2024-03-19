@@ -3,6 +3,7 @@ package com.restaurant.restaurantorderingapp.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.restaurant.restaurantorderingapp.dto.menuCategoriesDto.CreateMenuCategoryDTO;
 import com.restaurant.restaurantorderingapp.dto.menuCategoriesDto.MenuCategoryDTO;
+import com.restaurant.restaurantorderingapp.dto.menuCategoriesDto.UpdateMenuCategoryDTO;
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.DuplicateKeyException;
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.EmptyDataTableException;
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.NotFoundException;
@@ -14,27 +15,23 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @WebMvcTest(MenuCategoryController.class)
-public class menuCategoryControllerTest {
+public class menuCategoryControllerTest extends BaseControllerTest{
 
     private static final String END_POINT_PATH = "/menuCategories";
-
-    @Autowired
-    private MockMvc mockMvc;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -57,9 +54,7 @@ public class menuCategoryControllerTest {
     }
 
     @AfterEach
-    public void tearDown() {
-
-    }
+    public void tearDown() {}
 
     @Test
     @DisplayName("Invalid Input Error Handling: : Create Menu Category with Invalid input.")
@@ -120,7 +115,7 @@ public class menuCategoryControllerTest {
     @DisplayName("Successfully GET a menu category by Id.")
     public void testGetMenuCategorySuccess() throws Exception{
         Long menuCategoryId = 1L;
-        String requestURI = END_POINT_PATH + "/" + menuCategoryId;
+        String requestURI = requestURIBuilder(END_POINT_PATH, menuCategoryId);
         String responseBody = objectMapper.writeValueAsString(menuCategoryTestEntity1);
 
         when(menuCategoryService.getMenuCategoryById(menuCategoryId))
@@ -134,18 +129,15 @@ public class menuCategoryControllerTest {
     @Test
     @DisplayName("Not Found Error Handler: find menu category with an unknown Id.")
     public void testGetMenuCategoryNotFoundError() throws Exception {
-        Long menuCategoryId = 125L;
+        Long menuCategoryId = 1255624L;
         String entityName = "Menu Category";
-        String requestURI = END_POINT_PATH + "/" + menuCategoryId;
+        String requestURI = requestURIBuilder(END_POINT_PATH, menuCategoryId);
 
         /* Our getMenuCategoryById should throw a NotFoundException with a custom msg, so here we
         * create an instance of the exception and pass the parameters it needs to create the custom msg.*/
         when(menuCategoryService.getMenuCategoryById(menuCategoryId)).thenThrow(new NotFoundException(entityName, menuCategoryId));
-        mockMvc.perform(get(requestURI))
-                .andDo(print())
-                .andExpect(status().isNotFound());
+        notFoundExceptionTest(requestURI, HttpMethod.GET);
         verify(menuCategoryService).getMenuCategoryById(menuCategoryId);
-        //verify(menuCategoryService.getMenuCategoryById(menuCategoryId));
     }
 
     @Test
@@ -170,4 +162,77 @@ public class menuCategoryControllerTest {
                 .andExpect(status().isNotFound());
         verify(menuCategoryService).getAllMenuCategories();
     }
+
+    @Test
+    @DisplayName("Not Found Error Handler: UPDATE a menu category that does not exist")
+    public void testUpdateMenuCategoryNotFoundError() throws Exception {
+        String entityName = "Menu Category";
+        Long menuCategoryId = 10432L;
+        String requestURI = requestURIBuilder(END_POINT_PATH, menuCategoryId);
+
+        UpdateMenuCategoryDTO updateMenuCategoryDTO = new UpdateMenuCategoryDTO("UpdateTest");
+        String requestBody = objectMapper.writeValueAsString(updateMenuCategoryDTO);
+
+        when(menuCategoryService.updateMenuCategory(menuCategoryId, updateMenuCategoryDTO)).thenThrow(
+                new NotFoundException(entityName, menuCategoryId)
+        );
+        notFoundExceptionTest(requestURI, HttpMethod.PUT, requestBody);
+        verify(menuCategoryService).updateMenuCategory(menuCategoryId, updateMenuCategoryDTO);
+    }
+
+
+    @Test
+    @DisplayName("Successfully UPDATE a menu category ")
+    public void testUpdateMenuCategorySuccess() throws Exception {
+        Long menuCategoryId = 1L;
+        String requestURI = requestURIBuilder(END_POINT_PATH, menuCategoryId);
+
+        UpdateMenuCategoryDTO updateMenuCategoryDTO = new UpdateMenuCategoryDTO("UpdateTest");
+        String requestBody = objectMapper.writeValueAsString(updateMenuCategoryDTO);
+
+        MenuCategoryDTO updatedMenuCategoryDTO = new MenuCategoryDTO(menuCategoryId, updateMenuCategoryDTO.menuCategoryName());
+        String responseBody = objectMapper.writeValueAsString(updatedMenuCategoryDTO);
+
+        when(menuCategoryService.updateMenuCategory(menuCategoryId, updateMenuCategoryDTO)).thenReturn(updatedMenuCategoryDTO);
+        mockMvc.perform(put(requestURI)
+                        .contentType("application/json")
+                        .content(requestBody))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json(responseBody));
+        verify(menuCategoryService).updateMenuCategory(menuCategoryId, updateMenuCategoryDTO);
+    }
+
+    @Test
+    @DisplayName("SUCCESSFULLY DELETE a menu category.")
+    public void testDeleteMenuCategorySuccess() throws Exception {
+        Long menuCategoryId = 1L;
+        String requestURI = requestURIBuilder(END_POINT_PATH, menuCategoryId);
+
+        doNothing().when(menuCategoryService).deleteMenuCategory(menuCategoryId);
+        mockMvc.perform(delete(requestURI))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string("Menu Category deleted successfully."));
+        verify(menuCategoryService).deleteMenuCategory(menuCategoryId);
+    }
+
+    @Test
+    @DisplayName("NOT FOUND ERROR HANDLER: DELETE a menu category that doesn't exist")
+    public void testDeleteMenuCategoryNotFoundError() throws Exception {
+        Long menuCategoryId = 102L;
+        String requestURI = requestURIBuilder(END_POINT_PATH, menuCategoryId);
+        String entityName = "Menu Category";
+
+        doThrow(new NotFoundException(entityName, menuCategoryId))
+                .when(menuCategoryService).deleteMenuCategory(menuCategoryId);
+        notFoundExceptionTest(requestURI, HttpMethod.DELETE);
+        verify(menuCategoryService).deleteMenuCategory(menuCategoryId);
+
+    }
+
+
+
 }
+
+
