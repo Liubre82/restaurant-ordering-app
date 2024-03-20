@@ -66,7 +66,8 @@ public class MenuCategoryController {
     }
 
     @PutMapping("/{menuCategoryId}")
-    public ResponseEntity<MenuCategoryDTO> updateMenuCategory(@PathVariable Long menuCategoryId, @RequestBody UpdateMenuCategoryDTO updateMenuCategoryDTO) {
+    public ResponseEntity<MenuCategoryDTO> updateMenuCategory(
+            @PathVariable Long menuCategoryId, @RequestBody @Valid UpdateMenuCategoryDTO updateMenuCategoryDTO) {
         MenuCategoryDTO menuCategoryDTO = menuCategoryService.updateMenuCategory(menuCategoryId, updateMenuCategoryDTO);
         return ResponseEntity.ok(menuCategoryDTO);
     }
