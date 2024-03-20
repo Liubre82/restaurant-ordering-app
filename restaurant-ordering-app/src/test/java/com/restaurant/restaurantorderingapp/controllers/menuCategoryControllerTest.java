@@ -53,7 +53,9 @@ public class menuCategoryControllerTest extends BaseControllerTest{
     }
 
     @AfterEach
-    public void tearDown() {}
+    public void tearDown() {
+        menuCategoryTestEntityList.clear();
+    }
 
     @Test
     @DisplayName("Invalid Input Error Handling: : Create Menu Category with Invalid input.")
