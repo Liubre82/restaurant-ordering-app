@@ -22,6 +22,38 @@ public abstract class BaseControllerTest {
         return endpoint + "/" + id;
     }
 
+    protected void getRequestSuccessTest(String endpoint, String responseBody) throws Exception {
+        mockMvc.perform(get(endpoint))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json(responseBody));
+    }
+
+    protected void updateRequestSuccessTest(String endpoint, String requestBody, String responseBody) throws Exception {
+        mockMvc.perform(put(endpoint)
+                        .contentType("application/json")
+                        .content(requestBody))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json(responseBody));
+    }
+
+    protected void deleteRequestSuccessTest(String endpoint, String entityName) throws Exception {
+        mockMvc.perform(delete(endpoint))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(entityName + " deleted successfully."));
+    }
+
+    protected void createRequestSuccessTest(String endpoint, String requestBody) throws Exception {
+        mockMvc.perform(post(endpoint)
+                        .contentType("application/json")
+                        .content(requestBody))
+                .andDo(print())
+                .andExpect(status().isCreated());
+
+    }
+
     protected void notFoundExceptionTest(String endpoint, HttpMethod httpMethod) throws Exception {
         mockMvc.perform(request(httpMethod, endpoint))
                 .andDo(print())
@@ -55,36 +87,6 @@ public abstract class BaseControllerTest {
                 .andExpect(jsonPath("$['message']", is("Empty data-table, there are no " + tableName)));
     }
 
-    protected void getRequestSuccessTest(String endpoint, String responseBody) throws Exception {
-        mockMvc.perform(get(endpoint))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().json(responseBody));
-    }
 
-    protected void updateRequestSuccessTest(String endpoint, String requestBody, String responseBody) throws Exception {
-        mockMvc.perform(put(endpoint)
-                        .contentType("application/json")
-                        .content(requestBody))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().json(responseBody));
-    }
-
-    protected void deleteRequestSuccessTest(String endpoint, String entityName) throws Exception {
-        mockMvc.perform(delete(endpoint))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string(entityName + " deleted successfully."));
-    }
-
-    protected void createRequestSuccessTest(String endpoint, String requestBody) throws Exception {
-        mockMvc.perform(post(endpoint)
-                        .contentType("application/json")
-                        .content(requestBody))
-                .andDo(print())
-                .andExpect(status().isCreated());
-
-    }
 
 }

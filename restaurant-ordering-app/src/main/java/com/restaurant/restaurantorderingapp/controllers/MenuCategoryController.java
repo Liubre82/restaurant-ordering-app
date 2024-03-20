@@ -23,7 +23,6 @@ public class MenuCategoryController {
         this.menuCategoryService = menuCategoryService;
     }
 
-
     // curl -i -s http://localhost:8080/api/menuCategories | sed -e 's/{/\n&/g'
     @GetMapping
     public ResponseEntity<List<MenuCategoryDTO>> getMenuCategories() {
@@ -33,8 +32,7 @@ public class MenuCategoryController {
 
     @GetMapping("/search")
     public ResponseEntity<List<MenuCategoryDTO>> searchMenuCategories(
-            @RequestParam String searchInput
-    ) {
+            @RequestParam String searchInput) {
         List<MenuCategoryDTO> menuCategories = menuCategoryService.searchMenuCategories(searchInput);
         return menuCategories.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(menuCategories);
     }
@@ -48,8 +46,7 @@ public class MenuCategoryController {
     // curl -i -X POST -H "Content-Type: application/json" -d '{"menuCategoryName": "JiajinCategory"}' http://localhost:8080/api/menuCategories
     @PostMapping
     public ResponseEntity<String> createMenuCategory(
-            @RequestBody @Valid CreateMenuCategoryDTO CreateMenuCategoryDTO
-            ) {
+            @RequestBody @Valid CreateMenuCategoryDTO CreateMenuCategoryDTO) {
         menuCategoryService.createMenuCategories(CreateMenuCategoryDTO);
         return ResponseEntity
                 .status(HttpStatus.CREATED)

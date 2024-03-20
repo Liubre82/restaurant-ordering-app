@@ -11,6 +11,7 @@ import com.restaurant.restaurantorderingapp.repositories.MenuCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -84,9 +85,10 @@ public class MenuCategoryService {
     }
 
     public List<MenuCategoryDTO> searchMenuCategories(String searchInput) {
-        Iterable<MenuCategory> menuCategoriesIterable = menuCategoryRepository.findByFieldNameLike(searchInput);
+        String wildCardSearchInput = "%" + searchInput + "%";
+        Iterable<MenuCategory> menuCategoriesIterable = menuCategoryRepository.findByMenuCategoryNameLike(wildCardSearchInput);
         if(!menuCategoriesIterable.iterator().hasNext()) {
-            return null;
+            return Collections.emptyList();
         }
         List<MenuCategoryDTO> menuCategories = StreamSupport.stream(menuCategoriesIterable.spliterator(), false)
                 .map(this::fromEntityToDTO)
