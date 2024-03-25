@@ -6,6 +6,15 @@ pipeline {
         maven 'Maven3'
     }
 
+    environment {
+        APP_NAME = "restaurant-ordering-app-pipeline"
+        RELEASE = "1.0.0"
+        DOCKER_USER = "liubrent"
+        DOCKER_PASS = 'docker-hub'
+        IMAGE_NAME = "${DOCKER_USER}" + "/" + "${APP_NAME}"
+        IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"
+    }
+
     stages {
         stage("Cleanup Workspace") {
             steps {
@@ -30,6 +39,22 @@ pipeline {
                 sh "mvn test -f restaurant-ordering-app/pom.xml"
             }
         }
+
+        stage("Build & Push Docker Image") {
+            steps {
+                script {
+                    docker.withRegistry('', DOCKER_PASS) {
+                        docker_image = docker.build "${IMAGE_NAME}"
+                    }
+    
+                    docker.withRegistry('', DOCKER_PASS) {
+                        docker_image.push("${IMAGE_TAG}")
+                        docker_image.push('latest')
+                    }
+                }
+            }
+        }
+        
     }
 
 }
