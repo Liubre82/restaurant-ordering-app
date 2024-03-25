@@ -81,6 +81,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>restaurant-ordering-app</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
