@@ -54,7 +54,50 @@ pipeline {
                 }
             }
         }
+
+       stage("Trivy Scan") {
+           steps {
+               script {
+                   sh ('docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image liubrent/restaurant-ordering-app-pipeline:latest --no-progress --scanners vuln  --exit-code 0 --severity HIGH,CRITICAL --format table')
+               }
+           }
+       }
+
+       stage ('Cleanup Artifacts') {
+           steps {
+               script {
+                    sh "docker rmi ${IMAGE_NAME}:${IMAGE_TAG}"
+                    sh "docker rmi ${IMAGE_NAME}:latest"
+               }
+          }
+       }
         
     }
 
+    post {
+        always {
+            cleanMavenDependencies()
+            cleanDocker()
+            sh 'df -h'
+        }
+        success {
+            // Clean up local Docker artifacts
+            sh 'rm -rf Dockerfile build_context_directory'
+        }
+    }
+
+}
+
+def cleanMavenDependencies() {
+    sh 'rm -rf $HOME/.m2/repository'
+}
+    
+ def cleanDocker() {
+    // Clean up Docker
+    sh 'echo "y" | docker system prune -a'
+}
+    
+def cleanTrivyImage() {
+    // Clean up Trivy container image
+    sh 'docker rmi -f aquasec/trivy'
 }
