@@ -26,7 +26,7 @@ public class MenuCategory {
         return menuCategoryName;
     }
 
-    public void setCategoryName(String menuCategoryName) {
+    public void setMenuCategoryName(String menuCategoryName) {
         this.menuCategoryName = menuCategoryName;
     }
 }

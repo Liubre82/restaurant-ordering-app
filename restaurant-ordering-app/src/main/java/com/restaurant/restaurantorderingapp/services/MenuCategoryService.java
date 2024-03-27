@@ -37,7 +37,7 @@ public class MenuCategoryService {
     //convert CreateMenuCategory DTO obj to entity obj
     public MenuCategory fromDTOToEntity(CreateMenuCategoryDTO CreateMenuCategoryDTO) {
         MenuCategory menuCategory = new MenuCategory();
-        menuCategory.setCategoryName(CreateMenuCategoryDTO.menuCategoryName());
+        menuCategory.setMenuCategoryName(CreateMenuCategoryDTO.menuCategoryName());
         return menuCategory;
     }
 
@@ -78,7 +78,7 @@ public class MenuCategoryService {
 
     public MenuCategoryDTO updateMenuCategory(Long menuCategoryId, UpdateMenuCategoryDTO updateMenuCategoryDTO) {
         MenuCategory menuCategory = findMenuCategoryById(menuCategoryId);
-        menuCategory.setCategoryName(updateMenuCategoryDTO.menuCategoryName());
+        menuCategory.setMenuCategoryName(updateMenuCategoryDTO.menuCategoryName());
         menuCategoryRepository.save(menuCategory);
         MenuCategoryDTO menuCategoryDTOUpdated = fromEntityToDTO(menuCategory);
         return menuCategoryDTOUpdated;
