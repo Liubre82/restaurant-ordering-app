@@ -2,11 +2,12 @@ package com.restaurant.restaurantorderingapp.dto.foodItemsDto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 public record UpdateFoodItemDTO(
 
         @NotNull
-        @NotBlank
+        @Positive
         Long menuCategoryId,
 
         @NotNull

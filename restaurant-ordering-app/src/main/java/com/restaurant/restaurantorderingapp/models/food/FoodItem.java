@@ -11,9 +11,7 @@ public class FoodItem {
     @Column(name = "food_item_id")
     private String foodItemId;
 
-    /* When the parent entity menuCategory is deleted, so will any FoodItem entity that was associated with
-    * the menuCategory. However, if a FoodItem entity was deleted nothing would happen to menuCategory*/
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
     @JoinColumn(name = "menu_category_id")
     private MenuCategory menuCategory;
 

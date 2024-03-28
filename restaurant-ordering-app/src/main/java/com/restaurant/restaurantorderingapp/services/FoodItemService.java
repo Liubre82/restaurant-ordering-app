@@ -66,6 +66,7 @@ public class FoodItemService {
         if(categoryNameCheck) throw new DuplicateKeyException(createFoodItemDTO.foodItemName());
         MenuCategory menuCategory = findMenuCategoryById(createFoodItemDTO.menuCategoryId());
         FoodItem foodItem = fromDTOToEntity(createFoodItemDTO, menuCategory);
+        menuCategory.getFoodItems().add(foodItem);
         foodItemRepository.save(foodItem);
     }
 

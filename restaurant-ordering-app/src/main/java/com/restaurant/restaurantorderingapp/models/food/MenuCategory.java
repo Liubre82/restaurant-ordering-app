@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.List;
+
 @Entity
 @Table(name = "menu_categories")
 public class MenuCategory {
@@ -18,6 +20,9 @@ public class MenuCategory {
     @Column(name = "menu_category_name")
     private String menuCategoryName;
 
+    @OneToMany(mappedBy = "menuCategory", cascade = CascadeType.REMOVE)
+    private List<FoodItem> foodItems;
+
     public Long getMenuCategoryId() {
         return menuCategoryId;
     }
@@ -30,4 +35,11 @@ public class MenuCategory {
         this.menuCategoryName = menuCategoryName;
     }
 
+    public List<FoodItem> getFoodItems() {
+        return foodItems;
+    }
+
+    public void setFoodItems(List<FoodItem> foodItems) {
+        this.foodItems = foodItems;
+    }
 }

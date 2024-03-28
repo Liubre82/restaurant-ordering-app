@@ -1,13 +1,16 @@
 package com.restaurant.restaurantorderingapp.services;
 
+import com.restaurant.restaurantorderingapp.dto.foodItemsDto.FoodItemDTO;
 import com.restaurant.restaurantorderingapp.dto.menuCategoriesDto.CreateMenuCategoryDTO;
 import com.restaurant.restaurantorderingapp.dto.menuCategoriesDto.MenuCategoryDTO;
 import com.restaurant.restaurantorderingapp.dto.menuCategoriesDto.UpdateMenuCategoryDTO;
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.DuplicateKeyException;
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.EmptyDataTableException;
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.NotFoundException;
+import com.restaurant.restaurantorderingapp.models.food.FoodItem;
 import com.restaurant.restaurantorderingapp.models.food.MenuCategory;
 import com.restaurant.restaurantorderingapp.repositories.MenuCategoryRepository;
+import com.restaurant.restaurantorderingapp.utils.mappers.FoodItemMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,6 +51,14 @@ public class MenuCategoryService {
         if(menuCategories.isEmpty()) throw new EmptyDataTableException(entityName);
         return menuCategories.stream()
                 .map(entity -> fromEntityToDTO(entity))
+                .collect(Collectors.toList());
+    }
+
+    public List<FoodItemDTO> getAllFoodItemsByMenuCategoryId(Long menuCategoryId) {
+        MenuCategory menuCategory = findMenuCategoryById(menuCategoryId);
+        List<FoodItem> foodItems = menuCategory.getFoodItems();
+        return foodItems.stream()
+                .map(entity -> FoodItemMapper.fromEntityToDTO(entity, menuCategory))
                 .collect(Collectors.toList());
     }
 

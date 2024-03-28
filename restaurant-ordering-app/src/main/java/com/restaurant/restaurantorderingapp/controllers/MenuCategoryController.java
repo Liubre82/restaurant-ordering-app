@@ -1,5 +1,6 @@
 package com.restaurant.restaurantorderingapp.controllers;
 
+import com.restaurant.restaurantorderingapp.dto.foodItemsDto.FoodItemDTO;
 import com.restaurant.restaurantorderingapp.dto.menuCategoriesDto.CreateMenuCategoryDTO;
 import com.restaurant.restaurantorderingapp.dto.menuCategoriesDto.MenuCategoryDTO;
 import com.restaurant.restaurantorderingapp.dto.menuCategoriesDto.UpdateMenuCategoryDTO;
@@ -41,6 +42,13 @@ public class MenuCategoryController {
     public ResponseEntity<MenuCategoryDTO> getMenuCategory(@PathVariable Long menuCategoryId) {
         MenuCategoryDTO menuCategoryDTO = menuCategoryService.getMenuCategoryById(menuCategoryId);
         return ResponseEntity.ok(menuCategoryDTO);
+    }
+
+    @GetMapping("/{menuCategoryId}/foodItems")
+    public ResponseEntity<List<FoodItemDTO>> getFoodItemsByMenuCategoryId(
+            @PathVariable Long menuCategoryId) {
+        List<FoodItemDTO> foodItems = menuCategoryService.getAllFoodItemsByMenuCategoryId(menuCategoryId);
+        return foodItems.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(foodItems);
     }
 
     // curl -i -X POST -H "Content-Type: application/json" -d '{"menuCategoryName": "JiajinCategory"}' http://localhost:8080/api/menuCategories
