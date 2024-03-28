@@ -16,6 +16,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import static com.restaurant.restaurantorderingapp.utils.mappers.MenuCategoryMapper.fromDTOToEntity;
+import static com.restaurant.restaurantorderingapp.utils.mappers.MenuCategoryMapper.fromEntityToDTO;
+
 @Service
 public class MenuCategoryService {
 
@@ -24,21 +27,6 @@ public class MenuCategoryService {
     @Autowired
     public MenuCategoryService(MenuCategoryRepository menuCategoryRepository) {
         this.menuCategoryRepository = menuCategoryRepository;
-    }
-
-    //convert MenuCategory entity obj to DTO obj
-    public MenuCategoryDTO fromEntityToDTO(MenuCategory menuCategory) {
-        return new MenuCategoryDTO(
-                menuCategory.getMenuCategoryId(),
-                menuCategory.getMenuCategoryName()
-        );
-    }
-
-    //convert CreateMenuCategory DTO obj to entity obj
-    public MenuCategory fromDTOToEntity(CreateMenuCategoryDTO CreateMenuCategoryDTO) {
-        MenuCategory menuCategory = new MenuCategory();
-        menuCategory.setMenuCategoryName(CreateMenuCategoryDTO.menuCategoryName());
-        return menuCategory;
     }
 
     public MenuCategory findMenuCategoryById(Long menuCategoryId) {
@@ -59,7 +47,7 @@ public class MenuCategoryService {
         List<MenuCategory> menuCategories = (List<MenuCategory>) menuCategoryRepository.findAll();
         if(menuCategories.isEmpty()) throw new EmptyDataTableException(entityName);
         return menuCategories.stream()
-                .map(this::fromEntityToDTO) //entity -> fromEntityToDTO(entity)
+                .map(entity -> fromEntityToDTO(entity))
                 .collect(Collectors.toList());
     }
 
@@ -91,7 +79,7 @@ public class MenuCategoryService {
             return Collections.emptyList();
         }
         List<MenuCategoryDTO> menuCategories = StreamSupport.stream(menuCategoriesIterable.spliterator(), false)
-                .map(this::fromEntityToDTO)
+                .map(entity -> fromEntityToDTO(entity))
                 .collect(Collectors.toList());
         return menuCategories;
     }

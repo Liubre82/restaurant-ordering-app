@@ -29,4 +29,5 @@ public class MenuCategory {
     public void setMenuCategoryName(String menuCategoryName) {
         this.menuCategoryName = menuCategoryName;
     }
+
 }

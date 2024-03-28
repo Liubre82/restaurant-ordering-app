@@ -8,14 +8,19 @@ public class FoodItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "food_item_id")
     private String foodItemId;
 
-    @ManyToOne
+    /* When the parent entity menuCategory is deleted, so will any FoodItem entity that was associated with
+    * the menuCategory. However, if a FoodItem entity was deleted nothing would happen to menuCategory*/
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "menu_category_id")
     private MenuCategory menuCategory;
 
+    @Column(name = "food_item_name", unique = true)
     private String foodItemName;
 
+    @Column(name = "food_item_description")
     private String foodItemDescription;
 
     public String getFoodItemId() {

@@ -16,6 +16,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import static com.restaurant.restaurantorderingapp.utils.mappers.FoodSizeMapper.fromDTOToEntity;
+import static com.restaurant.restaurantorderingapp.utils.mappers.FoodSizeMapper.fromEntityToDTO;
+
+
 @Service
 public class FoodSizeService {
 
@@ -24,19 +28,6 @@ public class FoodSizeService {
     @Autowired
     public FoodSizeService(FoodSizeRepository foodSizeRepository) {
         this.foodSizeRepository = foodSizeRepository;
-    }
-    
-    public FoodSizeDTO fromEntityToDTO(FoodSize foodSize) {
-        return new FoodSizeDTO(
-                foodSize.getFoodSizeId(),
-                foodSize.getFoodSizeName()
-        );
-    }
-
-    public FoodSize fromDTOToEntity(CreateFoodSizeDTO createFoodSizeDTO) {
-        FoodSize foodSize = new FoodSize();
-        foodSize.setFoodSizeName(createFoodSizeDTO.foodSizeName());
-        return foodSize;
     }
 
     public FoodSize findFoodSizeById(Long foodSizeId) {
@@ -57,7 +48,7 @@ public class FoodSizeService {
         List<FoodSize> foodSizes = (List<FoodSize>) foodSizeRepository.findAll();
         if(foodSizes.isEmpty()) throw new EmptyDataTableException(entityName);
         return foodSizes.stream()
-                .map(this::fromEntityToDTO) //entity -> fromEntityToDTO(entity)
+                .map(entity -> fromEntityToDTO(entity)) //
                 .collect(Collectors.toList());
     }
 
@@ -89,7 +80,7 @@ public class FoodSizeService {
             return Collections.emptyList();
         }
         List<FoodSizeDTO> FoodSizes = StreamSupport.stream(FoodSizesIterable.spliterator(), false)
-                .map(this::fromEntityToDTO)
+                .map(entity -> fromEntityToDTO(entity))
                 .collect(Collectors.toList());
         return FoodSizes;
     }
