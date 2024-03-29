@@ -16,7 +16,9 @@ public class FoodItemVariation {
     @JoinColumn(name = "food_item_id")
     private FoodItem foodItem;
 
-    private Long foodSizeId;
+    @OneToOne
+    @JoinColumn(name = "food_size_id")
+    private FoodSize foodSize;
 
     private BigDecimal foodPrice;
 
@@ -32,12 +34,12 @@ public class FoodItemVariation {
         this.foodItem = foodItem;
     }
 
-    public Long getFoodSizeId() {
-        return foodSizeId;
+    public FoodSize getFoodSize() {
+        return foodSize;
     }
 
-    public void setFoodSizeId(Long foodSizeId) {
-        this.foodSizeId = foodSizeId;
+    public void setFoodSize(FoodSize foodSize) {
+        this.foodSize = foodSize;
     }
 
     public BigDecimal getFoodPrice() {

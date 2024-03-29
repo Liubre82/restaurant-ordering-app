@@ -18,8 +18,6 @@ public record FoodItemDTO (
         @NotBlank
         String foodItemName,
 
-        @NotNull
-        @NotBlank
         String foodItemDescription
 
 ) {}

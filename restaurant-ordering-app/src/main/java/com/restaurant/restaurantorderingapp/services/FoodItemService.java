@@ -50,8 +50,13 @@ public class FoodItemService {
         return  FoodItemDTO;
     }
 
-    /* Retrieve all entities from food_items table then pass it into a
-     * stream to be converted into DTOs and return it in a List*/
+    /**
+     * Retrieve all entities from food_items table then pass it into a
+     * stream to be converted into DTOs to be sent to the client.
+     *
+     * @return the list of foodItems in DTO form.
+     * @throws EmptyDataTableException if there is no foodItems in the datatable, AKA empty datatable.
+     */
     public List<FoodItemDTO> getAllFoodItems() {
         String entityName = "food items";
         List<FoodItem> foodItems = (List<FoodItem>) foodItemRepository.findAll();
@@ -87,6 +92,16 @@ public class FoodItemService {
         return FoodItemDTOUpdated;
     }
 
+    /**
+     * searches for all the foodItems based on their foodItem names, that contains the input string provided
+     * by the client.
+     * Method will look for the foodItems, and convert all foodItem entities into a DTO to be returned back to
+     * the client.
+     *
+     * @param searchInput the string that is inputted and used in our search query to find foodItem names
+     *                    that contain the searchInput string.
+     * @return the list of foodItems in DTO form, or an empty list.
+     */
     public List<FoodItemDTO> searchFoodItems(String searchInput) {
         String wildCardSearchInput = "%" + searchInput + "%";
         Iterable<FoodItem> FoodItemsIterable = foodItemRepository.findByFoodItemNameLike(wildCardSearchInput);

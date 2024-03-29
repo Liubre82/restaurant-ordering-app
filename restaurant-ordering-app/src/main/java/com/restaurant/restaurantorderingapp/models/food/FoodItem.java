@@ -2,6 +2,8 @@ package com.restaurant.restaurantorderingapp.models.food;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "food_items")
 public class FoodItem {
@@ -20,6 +22,9 @@ public class FoodItem {
 
     @Column(name = "food_item_description")
     private String foodItemDescription;
+
+    @OneToMany(mappedBy = "foodItem", cascade = CascadeType.REMOVE)
+    private List<FoodItemVariation> foodItemVariations;
 
     public String getFoodItemId() {
         return foodItemId;
@@ -47,5 +52,13 @@ public class FoodItem {
 
     public void setFoodItemDescription(String foodItemDescription) {
         this.foodItemDescription = foodItemDescription;
+    }
+
+    public List<FoodItemVariation> getFoodItemVariations() {
+        return foodItemVariations;
+    }
+
+    public void setFoodItemVariations(List<FoodItemVariation> foodItemVariations) {
+        this.foodItemVariations = foodItemVariations;
     }
 }
