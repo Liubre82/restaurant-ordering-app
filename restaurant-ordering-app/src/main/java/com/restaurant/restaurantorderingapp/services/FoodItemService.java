@@ -1,5 +1,6 @@
 package com.restaurant.restaurantorderingapp.services;
 
+import com.restaurant.restaurantorderingapp.dto.foodImagesDto.FoodImageDTO;
 import com.restaurant.restaurantorderingapp.dto.foodItemVariationsDto.FoodItemVariationDTO;
 import com.restaurant.restaurantorderingapp.dto.foodItemsDto.CreateFoodItemDTO;
 import com.restaurant.restaurantorderingapp.dto.foodItemsDto.FoodItemDTO;
@@ -7,11 +8,13 @@ import com.restaurant.restaurantorderingapp.dto.foodItemsDto.UpdateFoodItemDTO;
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.DuplicateKeyException;
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.EmptyDataTableException;
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.NotFoundException;
+import com.restaurant.restaurantorderingapp.models.food.FoodImage;
 import com.restaurant.restaurantorderingapp.models.food.FoodItem;
 import com.restaurant.restaurantorderingapp.models.food.FoodItemVariation;
 import com.restaurant.restaurantorderingapp.models.food.MenuCategory;
 import com.restaurant.restaurantorderingapp.repositories.FoodItemRepository;
 import com.restaurant.restaurantorderingapp.repositories.MenuCategoryRepository;
+import com.restaurant.restaurantorderingapp.utils.mappers.FoodImageMapper;
 import com.restaurant.restaurantorderingapp.utils.mappers.FoodItemVariationMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -74,6 +77,14 @@ public class FoodItemService {
         List<FoodItemVariation> foodItemVariations = foodItem.getFoodItemVariations();
         return foodItemVariations.stream()
                 .map(FoodItemVariationMapper::fromEntityToDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<FoodImageDTO> getAllFoodImages(String foodItemId) {
+        FoodItem foodItem = findFoodItemById(foodItemId);
+        List<FoodImage> foodImages = foodItem.getFoodImages();
+        return foodImages.stream()
+                .map(FoodImageMapper::fromEntityToDTO)
                 .collect(Collectors.toList());
     }
 

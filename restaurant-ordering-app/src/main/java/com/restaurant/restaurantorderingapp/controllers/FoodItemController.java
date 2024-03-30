@@ -1,5 +1,6 @@
 package com.restaurant.restaurantorderingapp.controllers;
 
+import com.restaurant.restaurantorderingapp.dto.foodImagesDto.FoodImageDTO;
 import com.restaurant.restaurantorderingapp.dto.foodItemVariationsDto.FoodItemVariationDTO;
 import com.restaurant.restaurantorderingapp.dto.foodItemsDto.CreateFoodItemDTO;
 import com.restaurant.restaurantorderingapp.dto.foodItemsDto.FoodItemDTO;
@@ -38,10 +39,17 @@ public class FoodItemController {
     }
 
     @GetMapping("/{foodItemId}/foodItemVariations")
-    public ResponseEntity<List<FoodItemVariationDTO>> getFoodItemVariationsByFoodItemId(
+    public ResponseEntity<List<FoodItemVariationDTO>> getAllFoodItemVariationsByFoodItemId(
             @PathVariable String foodItemId) {
         List<FoodItemVariationDTO> foodItemVariationDTOS = foodItemService.getAllFoodItemVariations(foodItemId);
         return ResponseEntity.ok(foodItemVariationDTOS);
+    }
+
+    @GetMapping("/{foodItemId}/foodImages")
+    public ResponseEntity<List<FoodImageDTO>> getAllFoodImagesByFoodItemId(
+            @PathVariable String foodItemId) {
+        List<FoodImageDTO> foodImagesDTO = foodItemService.getAllFoodImages(foodItemId);
+        return ResponseEntity.ok(foodImagesDTO);
     }
 
     @GetMapping("/search")

@@ -26,6 +26,9 @@ public class FoodItem {
     @OneToMany(mappedBy = "foodItem", cascade = CascadeType.REMOVE)
     private List<FoodItemVariation> foodItemVariations;
 
+    @OneToMany(mappedBy = "foodItem", cascade = CascadeType.REMOVE)
+    private List<FoodImage> foodImages;
+
     public String getFoodItemId() {
         return foodItemId;
     }
@@ -60,5 +63,13 @@ public class FoodItem {
 
     public void setFoodItemVariations(List<FoodItemVariation> foodItemVariations) {
         this.foodItemVariations = foodItemVariations;
+    }
+
+    public List<FoodImage> getFoodImages() {
+        return foodImages;
+    }
+
+    public void setFoodImages(List<FoodImage> foodImages) {
+        this.foodImages = foodImages;
     }
 }
