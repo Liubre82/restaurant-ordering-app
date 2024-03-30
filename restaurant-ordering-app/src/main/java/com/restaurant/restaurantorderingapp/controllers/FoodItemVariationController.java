@@ -2,6 +2,7 @@ package com.restaurant.restaurantorderingapp.controllers;
 
 import com.restaurant.restaurantorderingapp.dto.foodItemVariationsDto.CreateFoodItemVariationDTO;
 import com.restaurant.restaurantorderingapp.dto.foodItemVariationsDto.FoodItemVariationDTO;
+import com.restaurant.restaurantorderingapp.dto.foodItemVariationsDto.UpdateFoodItemVariationDTO;
 import com.restaurant.restaurantorderingapp.services.FoodItemVariationService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,10 +55,10 @@ public class FoodItemVariationController {
                 .body("Food Item deleted successfully.");
     }
 
-//    @PutMapping("/{foodItemVariationId}")
-//    public ResponseEntity<FoodItemVariationDTO> updateFoodItemVariation(
-//            @PathVariable String foodItemVariationId, @RequestBody @Valid UpdateFoodItemVariationDTO updateFoodItemVariationDTO) {
-//        FoodItemVariationDTO foodItemVariationDTO = foodItemVariationService.updateFoodItemVariation(foodItemVariationId, updateFoodItemVariationDTO);
-//        return ResponseEntity.ok(foodItemVariationDTO);
-//    }
+    @PutMapping("/{foodItemVariationId}")
+    public ResponseEntity<FoodItemVariationDTO> updateFoodItemVariation(
+            @PathVariable Long foodItemVariationId, @RequestBody @Valid UpdateFoodItemVariationDTO updateFoodItemVariationDTO) {
+        FoodItemVariationDTO foodItemVariationDTO = foodItemVariationService.updateFoodItemVariation(foodItemVariationId, updateFoodItemVariationDTO);
+        return ResponseEntity.ok(foodItemVariationDTO);
+    }
 }

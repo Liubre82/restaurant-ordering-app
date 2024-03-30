@@ -2,6 +2,7 @@ package com.restaurant.restaurantorderingapp.services;
 
 import com.restaurant.restaurantorderingapp.dto.foodItemVariationsDto.CreateFoodItemVariationDTO;
 import com.restaurant.restaurantorderingapp.dto.foodItemVariationsDto.FoodItemVariationDTO;
+import com.restaurant.restaurantorderingapp.dto.foodItemVariationsDto.UpdateFoodItemVariationDTO;
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.DuplicateKeyException;
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.EmptyDataTableException;
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.NotFoundException;
@@ -85,15 +86,21 @@ public class FoodItemVariationService {
 
     public void deleteFoodItemVariation(Long foodItemVariationId) throws NotFoundException {
         boolean FoodItemVariationExist = foodItemVariationRepository.existsById(foodItemVariationId);
-        if(!FoodItemVariationExist) throw new NotFoundException("Food Size", foodItemVariationId);
+        if(!FoodItemVariationExist) throw new NotFoundException("Food Item Variation", foodItemVariationId);
         foodItemVariationRepository.deleteById(foodItemVariationId);
     }
 
-//    public FoodItemVariationDTO updateFoodItemVariation(Long foodItemVariationId, UpdateFoodItemVariationDTO updateFoodItemVariationDTO) {
-//        FoodItemVariation FoodItemVariation = findFoodItemVariationById(foodItemVariationId);
-//        FoodItemVariation.setFoodItemVariationName(updateFoodItemVariationDTO.foodItemVariationName());
-//        foodItemVariationRepository.save(FoodItemVariation);
-//        FoodItemVariationDTO FoodItemVariationDTOUpdated = fromEntityToDTO(FoodItemVariation);
-//        return FoodItemVariationDTOUpdated;
-//    }
+    public FoodItemVariationDTO updateFoodItemVariation(Long foodItemVariationId, UpdateFoodItemVariationDTO updateFoodItemVariationDTO) {
+        FoodItemVariation foodItemVariation = findFoodItemVariationById(foodItemVariationId);
+        FoodItem foodItem = findFoodItemById(updateFoodItemVariationDTO.foodItemId());
+        FoodSize foodSize = findFoodSizeById(updateFoodItemVariationDTO.foodSizeId());
+
+        foodItemVariation.setFoodItem(foodItem);
+        foodItemVariation.setFoodSize(foodSize);
+        foodItemVariation.setFoodPrice(updateFoodItemVariationDTO.foodPrice());
+
+        foodItemVariationRepository.save(foodItemVariation);
+        FoodItemVariationDTO FoodItemVariationDTOUpdated = fromEntityToDTO(foodItemVariation);
+        return FoodItemVariationDTOUpdated;
+    }
 }
