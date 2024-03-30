@@ -1,5 +1,6 @@
 package com.restaurant.restaurantorderingapp.controllers;
 
+import com.restaurant.restaurantorderingapp.dto.foodItemVariationsDto.FoodItemVariationDTO;
 import com.restaurant.restaurantorderingapp.dto.foodItemsDto.CreateFoodItemDTO;
 import com.restaurant.restaurantorderingapp.dto.foodItemsDto.FoodItemDTO;
 import com.restaurant.restaurantorderingapp.dto.foodItemsDto.UpdateFoodItemDTO;
@@ -30,17 +31,24 @@ public class FoodItemController {
         return ResponseEntity.ok(foodItems);
     }
 
+    @GetMapping("/{foodItemId}")
+    public ResponseEntity<FoodItemDTO> getFoodItem(@PathVariable String foodItemId) {
+        FoodItemDTO foodItemDTO = foodItemService.getFoodItemById(foodItemId);
+        return ResponseEntity.ok(foodItemDTO);
+    }
+
+    @GetMapping("/{foodItemId}/foodItemVariations")
+    public ResponseEntity<List<FoodItemVariationDTO>> getFoodItemVariationsByFoodItemId(
+            @PathVariable String foodItemId) {
+        List<FoodItemVariationDTO> foodItemVariationDTOS = foodItemService.getAllFoodItemVariations(foodItemId);
+        return ResponseEntity.ok(foodItemVariationDTOS);
+    }
+
     @GetMapping("/search")
     public ResponseEntity<List<FoodItemDTO>> searchFoodItems(
             @RequestParam String searchInput) {
         List<FoodItemDTO> foodItems = foodItemService.searchFoodItems(searchInput);
         return foodItems.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(foodItems);
-    }
-
-    @GetMapping("/{foodItemId}")
-    public ResponseEntity<FoodItemDTO> getFoodItem(@PathVariable String foodItemId) {
-        FoodItemDTO foodItemDTO = foodItemService.getFoodItemById(foodItemId);
-        return ResponseEntity.ok(foodItemDTO);
     }
 
     // curl -i -X POST -H "Content-Type: application/json" -d '{"foodItemName": "XXL"}' http://localhost:8080/api/foodItems

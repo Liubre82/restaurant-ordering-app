@@ -1,5 +1,6 @@
 package com.restaurant.restaurantorderingapp.services;
 
+import com.restaurant.restaurantorderingapp.dto.foodItemVariationsDto.FoodItemVariationDTO;
 import com.restaurant.restaurantorderingapp.dto.foodItemsDto.CreateFoodItemDTO;
 import com.restaurant.restaurantorderingapp.dto.foodItemsDto.FoodItemDTO;
 import com.restaurant.restaurantorderingapp.dto.foodItemsDto.UpdateFoodItemDTO;
@@ -7,9 +8,11 @@ import com.restaurant.restaurantorderingapp.exceptions.customExceptions.Duplicat
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.EmptyDataTableException;
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.NotFoundException;
 import com.restaurant.restaurantorderingapp.models.food.FoodItem;
+import com.restaurant.restaurantorderingapp.models.food.FoodItemVariation;
 import com.restaurant.restaurantorderingapp.models.food.MenuCategory;
 import com.restaurant.restaurantorderingapp.repositories.FoodItemRepository;
 import com.restaurant.restaurantorderingapp.repositories.MenuCategoryRepository;
+import com.restaurant.restaurantorderingapp.utils.mappers.FoodItemVariationMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -63,6 +66,14 @@ public class FoodItemService {
         if(foodItems.isEmpty()) throw new EmptyDataTableException(entityName);
         return foodItems.stream()
                 .map(entity -> fromEntityToDTO(entity, entity.getMenuCategory())) //
+                .collect(Collectors.toList());
+    }
+
+    public List<FoodItemVariationDTO> getAllFoodItemVariations(String foodItemId) {
+        FoodItem foodItem = findFoodItemById(foodItemId);
+        List<FoodItemVariation> foodItemVariations = foodItem.getFoodItemVariations();
+        return foodItemVariations.stream()
+                .map(FoodItemVariationMapper::fromEntityToDTO)
                 .collect(Collectors.toList());
     }
 

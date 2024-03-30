@@ -15,8 +15,7 @@ public class FoodItemVariationMapper {
     public static FoodItemVariation fromDTOToEntity(
             CreateFoodItemVariationDTO createFoodItemVariationDTO,
             FoodItem foodItem,
-            FoodSize foodSize )
-    {
+            FoodSize foodSize ) {
         FoodItemVariation foodItemVariation = new FoodItemVariation();
         foodItemVariation.setFoodItem(foodItem);
         foodItemVariation.setFoodSize(foodSize);
