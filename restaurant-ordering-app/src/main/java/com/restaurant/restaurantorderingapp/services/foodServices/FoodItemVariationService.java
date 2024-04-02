@@ -1,4 +1,4 @@
-package com.restaurant.restaurantorderingapp.services;
+package com.restaurant.restaurantorderingapp.services.foodServices;
 
 import com.restaurant.restaurantorderingapp.dto.foodItemVariationsDto.CreateFoodItemVariationDTO;
 import com.restaurant.restaurantorderingapp.dto.foodItemVariationsDto.FoodItemVariationDTO;
@@ -9,9 +9,9 @@ import com.restaurant.restaurantorderingapp.exceptions.customExceptions.NotFound
 import com.restaurant.restaurantorderingapp.models.food.FoodItem;
 import com.restaurant.restaurantorderingapp.models.food.FoodItemVariation;
 import com.restaurant.restaurantorderingapp.models.food.FoodSize;
-import com.restaurant.restaurantorderingapp.repositories.FoodItemRepository;
-import com.restaurant.restaurantorderingapp.repositories.FoodItemVariationRepository;
-import com.restaurant.restaurantorderingapp.repositories.FoodSizeRepository;
+import com.restaurant.restaurantorderingapp.repositories.foodRepositories.FoodItemRepository;
+import com.restaurant.restaurantorderingapp.repositories.foodRepositories.FoodItemVariationRepository;
+import com.restaurant.restaurantorderingapp.repositories.foodRepositories.FoodSizeRepository;
 import com.restaurant.restaurantorderingapp.utils.mappers.FoodItemVariationMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

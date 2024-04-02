@@ -1,7 +1,7 @@
-package com.restaurant.restaurantorderingapp.services;
+package com.restaurant.restaurantorderingapp.services.userServices;
 
 import com.restaurant.restaurantorderingapp.models.user.User;
-import com.restaurant.restaurantorderingapp.repositories.UserRepository;
+import com.restaurant.restaurantorderingapp.repositories.userRepositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

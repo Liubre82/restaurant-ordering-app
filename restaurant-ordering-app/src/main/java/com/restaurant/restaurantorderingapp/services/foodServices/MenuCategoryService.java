@@ -1,4 +1,4 @@
-package com.restaurant.restaurantorderingapp.services;
+package com.restaurant.restaurantorderingapp.services.foodServices;
 
 import com.restaurant.restaurantorderingapp.dto.foodItemsDto.FoodItemDTO;
 import com.restaurant.restaurantorderingapp.dto.menuCategoriesDto.CreateMenuCategoryDTO;
@@ -9,7 +9,7 @@ import com.restaurant.restaurantorderingapp.exceptions.customExceptions.EmptyDat
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.NotFoundException;
 import com.restaurant.restaurantorderingapp.models.food.FoodItem;
 import com.restaurant.restaurantorderingapp.models.food.MenuCategory;
-import com.restaurant.restaurantorderingapp.repositories.MenuCategoryRepository;
+import com.restaurant.restaurantorderingapp.repositories.foodRepositories.MenuCategoryRepository;
 import com.restaurant.restaurantorderingapp.utils.mappers.FoodItemMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

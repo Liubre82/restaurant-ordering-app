@@ -1,4 +1,4 @@
-package com.restaurant.restaurantorderingapp.services;
+package com.restaurant.restaurantorderingapp.services.foodServices;
 
 import com.restaurant.restaurantorderingapp.dto.foodSizesDto.CreateFoodSizeDTO;
 import com.restaurant.restaurantorderingapp.dto.foodSizesDto.FoodSizeDTO;
@@ -7,7 +7,7 @@ import com.restaurant.restaurantorderingapp.exceptions.customExceptions.Duplicat
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.EmptyDataTableException;
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.NotFoundException;
 import com.restaurant.restaurantorderingapp.models.food.FoodSize;
-import com.restaurant.restaurantorderingapp.repositories.FoodSizeRepository;
+import com.restaurant.restaurantorderingapp.repositories.foodRepositories.FoodSizeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

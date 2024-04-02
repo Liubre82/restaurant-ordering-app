@@ -1,9 +1,9 @@
-package com.restaurant.restaurantorderingapp.controllers;
+package com.restaurant.restaurantorderingapp.controllers.foodControllers;
 
 import com.restaurant.restaurantorderingapp.dto.foodImagesDto.CreateFoodImageDTO;
 import com.restaurant.restaurantorderingapp.dto.foodImagesDto.FoodImageDTO;
 import com.restaurant.restaurantorderingapp.dto.foodImagesDto.UpdateFoodImageDTO;
-import com.restaurant.restaurantorderingapp.services.FoodImageService;
+import com.restaurant.restaurantorderingapp.services.foodServices.FoodImageService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

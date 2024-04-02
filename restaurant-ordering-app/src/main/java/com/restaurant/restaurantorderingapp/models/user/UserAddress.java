@@ -8,18 +8,24 @@ public class UserAddress {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_address_id")
     private Long userAddressId;
 
+    //Stores the userId rather than the entity, since it's unnecessary to populate this information for UserAddress entity.
     @ManyToOne(targetEntity = User.class)
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(name = "address_name")
     private String addressName;
 
+    @Column(name = "city")
     private String city;
 
+    @Column(name = "state")
     private String state;
 
+    @Column(name = "zip_code")
     private String zipCode;
 
     public Long getUserAddressId() {

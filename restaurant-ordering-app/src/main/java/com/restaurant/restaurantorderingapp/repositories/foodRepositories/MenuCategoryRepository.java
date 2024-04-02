@@ -1,4 +1,4 @@
-package com.restaurant.restaurantorderingapp.repositories;
+package com.restaurant.restaurantorderingapp.repositories.foodRepositories;
 
 import com.restaurant.restaurantorderingapp.models.food.MenuCategory;
 import org.springframework.data.jpa.repository.Query;

@@ -1,6 +1,7 @@
 package com.restaurant.restaurantorderingapp.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.restaurant.restaurantorderingapp.controllers.foodControllers.FoodItemVariationController;
 import com.restaurant.restaurantorderingapp.dto.foodItemVariationsDto.CreateFoodItemVariationDTO;
 import com.restaurant.restaurantorderingapp.dto.foodItemVariationsDto.FoodItemVariationDTO;
 import com.restaurant.restaurantorderingapp.dto.foodItemVariationsDto.UpdateFoodItemVariationDTO;
@@ -10,7 +11,7 @@ import com.restaurant.restaurantorderingapp.dto.menuCategoriesDto.MenuCategoryDT
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.DuplicateKeyException;
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.EmptyDataTableException;
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.NotFoundException;
-import com.restaurant.restaurantorderingapp.services.FoodItemVariationService;
+import com.restaurant.restaurantorderingapp.services.foodServices.FoodItemVariationService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -64,8 +65,6 @@ public class FoodItemVariationControllerTest extends BaseControllerTest {
         foodItemVariationTestEntity4 = new FoodItemVariationDTO(4L, foodItemTestEntity1, foodSizeTestEntity1, BigDecimal.valueOf(5.99));
         foodItemVariationTestEntity5 = new FoodItemVariationDTO(5L, foodItemTestEntity1, foodSizeTestEntity1, BigDecimal.valueOf(12.99));
         foodItemVariationTestEntity6 = new FoodItemVariationDTO(6L, foodItemTestEntity1, foodSizeTestEntity1, BigDecimal.valueOf(8.99));
-
-
 
         foodItemVariationTestEntityList.add(foodItemVariationTestEntity1);
         foodItemVariationTestEntityList.add(foodItemVariationTestEntity2);

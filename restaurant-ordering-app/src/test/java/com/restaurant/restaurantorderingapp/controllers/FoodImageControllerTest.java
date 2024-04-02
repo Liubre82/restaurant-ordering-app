@@ -1,13 +1,14 @@
 package com.restaurant.restaurantorderingapp.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.restaurant.restaurantorderingapp.controllers.foodControllers.FoodImageController;
 import com.restaurant.restaurantorderingapp.dto.foodImagesDto.CreateFoodImageDTO;
 import com.restaurant.restaurantorderingapp.dto.foodImagesDto.FoodImageDTO;
 import com.restaurant.restaurantorderingapp.dto.foodImagesDto.UpdateFoodImageDTO;
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.DuplicateKeyException;
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.EmptyDataTableException;
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.NotFoundException;
-import com.restaurant.restaurantorderingapp.services.FoodImageService;
+import com.restaurant.restaurantorderingapp.services.foodServices.FoodImageService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -194,7 +195,7 @@ public class FoodImageControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @DisplayName("Duplicate Menu Category Error Handling: CREATE a food image that already exist.")
+    @DisplayName("Duplicate Food Image Error Handling: CREATE a food image that already exist.")
     @Order(10)
     public void testCreateFoodImageDuplicateError() throws Exception {
 

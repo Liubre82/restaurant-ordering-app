@@ -1,4 +1,4 @@
-package com.restaurant.restaurantorderingapp.services;
+package com.restaurant.restaurantorderingapp.services.foodServices;
 
 import com.restaurant.restaurantorderingapp.dto.foodImagesDto.FoodImageDTO;
 import com.restaurant.restaurantorderingapp.dto.foodItemVariationsDto.FoodItemVariationDTO;
@@ -12,8 +12,8 @@ import com.restaurant.restaurantorderingapp.models.food.FoodImage;
 import com.restaurant.restaurantorderingapp.models.food.FoodItem;
 import com.restaurant.restaurantorderingapp.models.food.FoodItemVariation;
 import com.restaurant.restaurantorderingapp.models.food.MenuCategory;
-import com.restaurant.restaurantorderingapp.repositories.FoodItemRepository;
-import com.restaurant.restaurantorderingapp.repositories.MenuCategoryRepository;
+import com.restaurant.restaurantorderingapp.repositories.foodRepositories.FoodItemRepository;
+import com.restaurant.restaurantorderingapp.repositories.foodRepositories.MenuCategoryRepository;
 import com.restaurant.restaurantorderingapp.utils.mappers.FoodImageMapper;
 import com.restaurant.restaurantorderingapp.utils.mappers.FoodItemVariationMapper;
 import org.springframework.beans.factory.annotation.Autowired;

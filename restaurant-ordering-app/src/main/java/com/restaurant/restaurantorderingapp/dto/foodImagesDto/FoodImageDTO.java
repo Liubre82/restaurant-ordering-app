@@ -12,7 +12,7 @@ public record FoodImageDTO(
 
         @NotNull
         @NotBlank
-        String foodItem,
+        String foodItemId,
 
         @NotNull
         @NotBlank

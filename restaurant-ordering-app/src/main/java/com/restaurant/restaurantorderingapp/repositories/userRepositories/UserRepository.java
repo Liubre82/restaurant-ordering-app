@@ -1,4 +1,4 @@
-package com.restaurant.restaurantorderingapp.repositories;
+package com.restaurant.restaurantorderingapp.repositories.userRepositories;
 
 import com.restaurant.restaurantorderingapp.models.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;

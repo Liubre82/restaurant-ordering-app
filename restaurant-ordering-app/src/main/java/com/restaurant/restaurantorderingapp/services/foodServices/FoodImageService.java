@@ -1,4 +1,4 @@
-package com.restaurant.restaurantorderingapp.services;
+package com.restaurant.restaurantorderingapp.services.foodServices;
 
 import com.restaurant.restaurantorderingapp.dto.foodImagesDto.CreateFoodImageDTO;
 import com.restaurant.restaurantorderingapp.dto.foodImagesDto.FoodImageDTO;
@@ -7,8 +7,8 @@ import com.restaurant.restaurantorderingapp.exceptions.customExceptions.EmptyDat
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.NotFoundException;
 import com.restaurant.restaurantorderingapp.models.food.FoodImage;
 import com.restaurant.restaurantorderingapp.models.food.FoodItem;
-import com.restaurant.restaurantorderingapp.repositories.FoodImageRepository;
-import com.restaurant.restaurantorderingapp.repositories.FoodItemRepository;
+import com.restaurant.restaurantorderingapp.repositories.foodRepositories.FoodImageRepository;
+import com.restaurant.restaurantorderingapp.repositories.foodRepositories.FoodItemRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

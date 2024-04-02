@@ -1,6 +1,6 @@
-package com.restaurant.restaurantorderingapp.controllers;
+package com.restaurant.restaurantorderingapp.controllers.userControllers;
 
-import com.restaurant.restaurantorderingapp.services.UserService;
+import com.restaurant.restaurantorderingapp.services.userServices.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

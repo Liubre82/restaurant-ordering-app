@@ -3,6 +3,7 @@
 package com.restaurant.restaurantorderingapp.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.restaurant.restaurantorderingapp.controllers.foodControllers.FoodItemController;
 import com.restaurant.restaurantorderingapp.dto.foodImagesDto.FoodImageDTO;
 import com.restaurant.restaurantorderingapp.dto.foodItemVariationsDto.FoodItemVariationDTO;
 import com.restaurant.restaurantorderingapp.dto.foodItemsDto.CreateFoodItemDTO;
@@ -13,7 +14,7 @@ import com.restaurant.restaurantorderingapp.dto.menuCategoriesDto.MenuCategoryDT
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.DuplicateKeyException;
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.EmptyDataTableException;
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.NotFoundException;
-import com.restaurant.restaurantorderingapp.services.FoodItemService;
+import com.restaurant.restaurantorderingapp.services.foodServices.FoodItemService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

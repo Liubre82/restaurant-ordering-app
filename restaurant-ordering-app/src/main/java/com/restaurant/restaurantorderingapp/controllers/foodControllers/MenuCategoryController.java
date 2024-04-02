@@ -1,10 +1,10 @@
-package com.restaurant.restaurantorderingapp.controllers;
+package com.restaurant.restaurantorderingapp.controllers.foodControllers;
 
 import com.restaurant.restaurantorderingapp.dto.foodItemsDto.FoodItemDTO;
 import com.restaurant.restaurantorderingapp.dto.menuCategoriesDto.CreateMenuCategoryDTO;
 import com.restaurant.restaurantorderingapp.dto.menuCategoriesDto.MenuCategoryDTO;
 import com.restaurant.restaurantorderingapp.dto.menuCategoriesDto.UpdateMenuCategoryDTO;
-import com.restaurant.restaurantorderingapp.services.MenuCategoryService;
+import com.restaurant.restaurantorderingapp.services.foodServices.MenuCategoryService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
