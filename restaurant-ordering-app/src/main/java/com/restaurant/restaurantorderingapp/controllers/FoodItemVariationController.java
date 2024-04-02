@@ -16,6 +16,8 @@ import java.util.List;
 @RequestMapping("/foodItemVariations")
 public class FoodItemVariationController {
 
+    private final String entityName = "Food Item Variation";
+
     private final FoodItemVariationService foodItemVariationService;
 
     @Autowired
@@ -43,7 +45,7 @@ public class FoodItemVariationController {
         foodItemVariationService.createFoodItemVariation(CreateFoodItemVariationDTO);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body("Food Item created successfully.");
+                .body(entityName + " created successfully.");
     }
 
     // curl -i -X DELETE http://localhost:8080/api/foodItemVariations/7
@@ -52,7 +54,7 @@ public class FoodItemVariationController {
         foodItemVariationService.deleteFoodItemVariation(foodItemVariationId);
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body("Food Item deleted successfully.");
+                .body(entityName + " deleted successfully.");
     }
 
     @PutMapping("/{foodItemVariationId}")

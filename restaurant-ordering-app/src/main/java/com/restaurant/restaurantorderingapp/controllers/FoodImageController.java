@@ -16,6 +16,7 @@ import java.util.List;
 @RequestMapping("/foodImages")
 public class FoodImageController {
 
+    private final String entityName = "Food Image";
 
     private final FoodImageService foodImageService;
 
@@ -44,7 +45,7 @@ public class FoodImageController {
         foodImageService.createFoodImages(CreateFoodImageDTO);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body("Food Item created successfully.");
+                .body(entityName + " created successfully.");
     }
 
     // curl -i -X DELETE http://localhost:8080/api/foodImages/7
@@ -53,7 +54,7 @@ public class FoodImageController {
         foodImageService.deleteFoodImage(foodImageId);
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body("Food Item deleted successfully.");
+                .body(entityName + " deleted successfully.");
     }
 
     @PutMapping("/{foodImageId}")

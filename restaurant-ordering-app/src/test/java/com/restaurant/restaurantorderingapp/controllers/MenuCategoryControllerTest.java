@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(MenuCategoryController.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class menuCategoryControllerTest extends BaseControllerTest{
+public class MenuCategoryControllerTest extends BaseControllerTest{
 
     private static final String END_POINT_PATH = "/menuCategories";
     private static final String tableName = "menu categories";

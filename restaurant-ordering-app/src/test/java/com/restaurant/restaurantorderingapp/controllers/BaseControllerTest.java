@@ -22,6 +22,10 @@ public abstract class BaseControllerTest {
         return endpoint + "/" + id;
     }
 
+    public String requestURIBuilder(String endpoint, String id) {
+        return endpoint + "/" + id;
+    }
+
     protected void getRequestSuccessTest(String endpoint, String responseBody) throws Exception {
         mockMvc.perform(get(endpoint))
                 .andDo(print())
