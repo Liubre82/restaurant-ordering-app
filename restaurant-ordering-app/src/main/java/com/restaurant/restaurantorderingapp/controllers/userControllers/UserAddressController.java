@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/userAddresses")
 public class UserAddressController {
@@ -21,6 +23,14 @@ public class UserAddressController {
     @Autowired
     public UserAddressController(UserAddressService userAddressService) {
         this.userAddressService = userAddressService;
+    }
+
+    // curl -i -s http://localhost:8080/api/userAddresses | sed -e 's/{/\n&/g'
+    //Method should not be accessible to any users,
+    @GetMapping
+    public ResponseEntity<List<UserAddressDTO>> getUserAddresses() {
+        List<UserAddressDTO> userAddresses = userAddressService.getAllUserAddresses();
+        return ResponseEntity.ok(userAddresses);
     }
 
     @GetMapping("/{userAddressId}")
