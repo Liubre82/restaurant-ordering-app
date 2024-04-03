@@ -1,8 +1,6 @@
 package com.restaurant.restaurantorderingapp.controllers.userControllers;
 
-import com.restaurant.restaurantorderingapp.dto.usersDto.CreateUserDTO;
-import com.restaurant.restaurantorderingapp.dto.usersDto.UpdateUserDTO;
-import com.restaurant.restaurantorderingapp.dto.usersDto.UserDTO;
+import com.restaurant.restaurantorderingapp.dto.usersDto.*;
 import com.restaurant.restaurantorderingapp.services.userServices.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +24,15 @@ public class UserController {
     }
 
     // curl -i -s http://localhost:8080/api/users | sed -e 's/{/\n&/g'
-    //Method should not be accessible to any users,
+    //Route only for development to see all user fields including password.
+    @GetMapping
+    public ResponseEntity<List<FullUserDTO>> getUsersFull() {
+        List<FullUserDTO> users = userService.getAllUsersInfo();
+        return ResponseEntity.ok(users);
+    }
+
+    // curl -i -s http://localhost:8080/api/users | sed -e 's/{/\n&/g'
+    //Method should not be accessible to any users.
     @GetMapping
     public ResponseEntity<List<UserDTO>> getUsers() {
         List<UserDTO> users = userService.getAllUsers();
@@ -62,6 +68,13 @@ public class UserController {
     public ResponseEntity<UserDTO> updateUser(
             @PathVariable String userId, @RequestBody @Valid UpdateUserDTO updateUserDTO) {
         UserDTO userDTO = userService.updateUser(userId, updateUserDTO);
+        return ResponseEntity.ok(userDTO);
+    }
+
+    @PutMapping("/{userId}/userPassword")
+    public ResponseEntity<UserDTO> updateUserPassword(
+            @PathVariable String userId, @RequestBody @Valid UpdateUserPasswordDTO updateUserPasswordDTO) {
+        UserDTO userDTO = userService.updateUserPassword(userId, updateUserPasswordDTO);
         return ResponseEntity.ok(userDTO);
     }
 }

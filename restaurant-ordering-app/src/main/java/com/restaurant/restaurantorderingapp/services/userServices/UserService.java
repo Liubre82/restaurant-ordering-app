@@ -1,14 +1,13 @@
 package com.restaurant.restaurantorderingapp.services.userServices;
 
-import com.restaurant.restaurantorderingapp.dto.usersDto.CreateUserDTO;
-import com.restaurant.restaurantorderingapp.dto.usersDto.UpdateUserDTO;
-import com.restaurant.restaurantorderingapp.dto.usersDto.UserDTO;
+import com.restaurant.restaurantorderingapp.dto.usersDto.*;
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.EmptyDataTableException;
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.NotFoundException;
 import com.restaurant.restaurantorderingapp.models.user.User;
 import com.restaurant.restaurantorderingapp.models.user.UserRole;
 import com.restaurant.restaurantorderingapp.repositories.userRepositories.UserRepository;
 import com.restaurant.restaurantorderingapp.repositories.userRepositories.UserRoleRepository;
+import com.restaurant.restaurantorderingapp.utils.mappers.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,8 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.restaurant.restaurantorderingapp.utils.mappers.UserMapper.fromDTOToEntity;
-import static com.restaurant.restaurantorderingapp.utils.mappers.UserMapper.fromEntityToDTO;
+import static com.restaurant.restaurantorderingapp.utils.mappers.UserMapper.*;
 
 @Service
 @Transactional
@@ -78,11 +76,19 @@ public class UserService {
      * @throws EmptyDataTableException if there is no users in the datatable, AKA empty datatable.
      */
     public List<UserDTO> getAllUsers() {
-        String entityName = "food items";
         List<User> users = (List<User>) userRepository.findAll();
         if(users.isEmpty()) throw new EmptyDataTableException(entityName);
         return users.stream()
                 .map(entity -> fromEntityToDTO(entity))
+                .collect(Collectors.toList());
+    }
+
+    // Only for development purpose to see the User password field.
+    public List<FullUserDTO> getAllUsersInfo() {
+        List<User> users = (List<User>) userRepository.findAll();
+        if(users.isEmpty()) throw new EmptyDataTableException(entityName);
+        return users.stream()
+                .map(UserMapper::fromEntityToDTOFull)
                 .collect(Collectors.toList());
     }
 
@@ -110,9 +116,9 @@ public class UserService {
     }
 
     /**
-     * Update the entity and convert it to DTO form for the client.
+     * Update a User entity userName & password fields and convert it to DTO form for the client.
      *
-     * @param userId is an id of type String that uniquely identifies a users address.
+     * @param userId is an id of type String that uniquely identifies a User entity.
      * @param updateUserDTO the form data sent by the client to update an existing User entity.
      * @return UserDTO, the updated entity in DTO form.
      * @throws NotFoundException if the userId is not found/doesn't exist in our db/context.
@@ -121,11 +127,25 @@ public class UserService {
         User user = findUserById(userId);
         user.setUserName(updateUserDTO.userName());
         user.setUserEmail(updateUserDTO.userEmail());
-        user.setUserPassword(updateUserDTO.userPassword());
         userRepository.save(user);
         UserDTO UserDTOUpdated = fromEntityToDTO(user);
         return UserDTOUpdated;
     }
 
-
+    /**
+     * Update a User entity password and convert it to DTO form for the client.
+     *
+     * @param userId is an id of type String that uniquely identifies a User.
+     * @param updateUserPasswordDTO the form data sent by the client to update the password field of
+     *                              the User entity.
+     * @return UserDTO, the updated entity in DTO form.
+     * @throws NotFoundException if the userId is not found/doesn't exist in our db/context.
+     */
+    public UserDTO updateUserPassword(String userId, UpdateUserPasswordDTO updateUserPasswordDTO) {
+        User user = findUserById(userId);
+        user.setUserPassword(updateUserPasswordDTO.userPassword());
+        userRepository.save(user);
+        UserDTO UserDTOUpdated = fromEntityToDTO(user);
+        return UserDTOUpdated;
+    }
 }
