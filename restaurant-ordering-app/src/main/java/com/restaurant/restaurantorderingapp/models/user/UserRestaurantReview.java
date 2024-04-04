@@ -1,7 +1,10 @@
 package com.restaurant.restaurantorderingapp.models.user;
 
 import jakarta.persistence.*;
-import java.sql.Timestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "user_restaurant_reviews")
@@ -9,22 +12,27 @@ public class UserRestaurantReview {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long restaurantReviewId;
+    private Long userRestaurantReviewId;
 
     @OneToOne(targetEntity = User.class)
     @JoinColumn(name = "user_id")
     private User user;
 
-    private String userRestaurantReviewId;
+    @Column(name = "user_restaurant_review_title")
+    private String userRestaurantReviewTitle;
 
-    private Long userRestaurantRating;
+    @Column(name = "user_restaurant_rating")
+    private BigDecimal userRestaurantRating;
 
+    @Column(name = "user_restaurant_review_description")
     private String userRestaurantReviewDescription;
 
-    private Timestamp createdAt;
+    @UpdateTimestamp
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
-    public Long getRestaurantReviewId() {
-        return restaurantReviewId;
+    public Long getUserRestaurantReviewId() {
+        return userRestaurantReviewId;
     }
 
     public User getUser() {
@@ -35,19 +43,19 @@ public class UserRestaurantReview {
         this.user = user;
     }
 
-    public String getUserRestaurantReviewId() {
-        return userRestaurantReviewId;
+    public String getUserRestaurantReviewTitle() {
+        return userRestaurantReviewTitle;
     }
 
-    public void setUserRestaurantReviewId(String userRestaurantReviewId) {
-        this.userRestaurantReviewId = userRestaurantReviewId;
+    public void setUserRestaurantReviewTitle(String userRestaurantReviewTitle) {
+        this.userRestaurantReviewTitle = userRestaurantReviewTitle;
     }
 
-    public Long getUserRestaurantRating() {
+    public BigDecimal getUserRestaurantRating() {
         return userRestaurantRating;
     }
 
-    public void setUserRestaurantRating(Long userRestaurantRating) {
+    public void setUserRestaurantRating(BigDecimal userRestaurantRating) {
         this.userRestaurantRating = userRestaurantRating;
     }
 
@@ -59,11 +67,11 @@ public class UserRestaurantReview {
         this.userRestaurantReviewDescription = userRestaurantReviewDescription;
     }
 
-    public Timestamp getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Timestamp createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 }

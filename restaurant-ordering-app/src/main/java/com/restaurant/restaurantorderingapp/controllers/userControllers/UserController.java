@@ -25,7 +25,7 @@ public class UserController {
 
     // curl -i -s http://localhost:8080/api/users | sed -e 's/{/\n&/g'
     //Route only for development to see all user fields including password.
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<FullUserDTO>> getUsersFull() {
         List<FullUserDTO> users = userService.getAllUsersInfo();
         return ResponseEntity.ok(users);
