@@ -16,10 +16,9 @@ public record UserDTO(
 
         @NotNull
         @NotBlank
-        String userName,
+        String username,
 
         @NotNull
         @NotBlank
         String userEmail
-
 ) {}

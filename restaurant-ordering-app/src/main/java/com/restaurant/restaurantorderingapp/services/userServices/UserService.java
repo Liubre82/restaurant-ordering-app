@@ -1,6 +1,9 @@
 package com.restaurant.restaurantorderingapp.services.userServices;
 
-import com.restaurant.restaurantorderingapp.dto.usersDto.*;
+import com.restaurant.restaurantorderingapp.dto.usersDto.FullUserDTO;
+import com.restaurant.restaurantorderingapp.dto.usersDto.UpdateUserDTO;
+import com.restaurant.restaurantorderingapp.dto.usersDto.UpdateUserPasswordDTO;
+import com.restaurant.restaurantorderingapp.dto.usersDto.UserDTO;
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.EmptyDataTableException;
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.NotFoundException;
 import com.restaurant.restaurantorderingapp.models.user.User;
@@ -9,17 +12,19 @@ import com.restaurant.restaurantorderingapp.repositories.userRepositories.UserRe
 import com.restaurant.restaurantorderingapp.repositories.userRepositories.UserRoleRepository;
 import com.restaurant.restaurantorderingapp.utils.mappers.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.restaurant.restaurantorderingapp.utils.mappers.UserMapper.*;
+import static com.restaurant.restaurantorderingapp.utils.mappers.UserMapper.fromEntityToDTO;
 
 @Service
 @Transactional
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private final String entityName = "User";
     private final UserRepository userRepository;
@@ -53,6 +58,11 @@ public class UserService {
     public User findUserById(String userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(entityName, userId));
+    }
+
+    public User findUserByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new NotFoundException(entityName, username));
     }
 
     /**
@@ -92,16 +102,16 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Creates an entity of User.
-     *
-     * @param createUserDTO the form data sent by the client to create a new User entity.
-     */
-    public void createUser(CreateUserDTO createUserDTO) {
-        UserRole userRole = findUserRoleById(createUserDTO.userRoleId());
-        User user = fromDTOToEntity(createUserDTO, userRole);
-        userRepository.save(user);
-    }
+//    /**
+//     * Creates an entity of User.
+//     *
+//     * @param createUserDTO the form data sent by the client to create a new User entity.
+//     */
+//    public void createUser(CreateUserDTO createUserDTO) {
+//        UserRole userRole = findUserRoleById(createUserDTO.userRoleId());
+//        User user = fromDTOToEntity(createUserDTO, userRole);
+//        userRepository.save(user);
+//    }
 
     /**
      * Delete a User entity with the given id.
@@ -125,7 +135,7 @@ public class UserService {
      */
     public UserDTO updateUser(String userId, UpdateUserDTO updateUserDTO) {
         User user = findUserById(userId);
-        user.setUserName(updateUserDTO.userName());
+        user.setUsername(updateUserDTO.username());
         user.setUserEmail(updateUserDTO.userEmail());
         userRepository.save(user);
         UserDTO UserDTOUpdated = fromEntityToDTO(user);
@@ -143,9 +153,22 @@ public class UserService {
      */
     public UserDTO updateUserPassword(String userId, UpdateUserPasswordDTO updateUserPasswordDTO) {
         User user = findUserById(userId);
-        user.setUserPassword(updateUserPasswordDTO.userPassword());
+        user.setPassword(updateUserPasswordDTO.userPassword());
         userRepository.save(user);
         UserDTO UserDTOUpdated = fromEntityToDTO(user);
         return UserDTOUpdated;
+    }
+
+    /**
+     * Update a User entity password and convert it to DTO form for the client.
+     *
+     * @param username is the 'username' to use for user login.
+     * @return UserDTO, the updated entity in DTO form.
+     * @throws NotFoundException if the userId is not found/doesn't exist in our db/context.
+     */
+    @Override
+    public UserDetails loadUserByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new NotFoundException(entityName, username));
     }
 }

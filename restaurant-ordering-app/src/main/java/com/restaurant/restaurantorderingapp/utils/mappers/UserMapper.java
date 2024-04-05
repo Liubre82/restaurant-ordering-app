@@ -15,17 +15,16 @@ public class UserMapper {
         return new UserDTO(
             user.getUserId(),
             user.getUserRole(),
-            user.getUserName(),
+            user.getUsername(),
             user.getUserEmail()
         );
     }
 
     public static User fromDTOToEntity(CreateUserDTO createUserDTO, UserRole userRole) {
-        User user = new User();
-        user.setUserRole(userRole);
-        user.setUserName(createUserDTO.userName());
+        User user = new User(userRole);
+        user.setUsername(createUserDTO.username());
         user.setUserEmail(createUserDTO.userEmail());
-        user.setUserPassword(createUserDTO.userPassword());
+        user.setPassword(createUserDTO.userPassword());
         return user;
     }
 
@@ -34,9 +33,9 @@ public class UserMapper {
         return new FullUserDTO(
                 user.getUserId(),
                 user.getUserRole(),
-                user.getUserName(),
+                user.getUsername(),
                 user.getUserEmail(),
-                user.getUserPassword()
+                user.getPassword()
         );
     }
 }

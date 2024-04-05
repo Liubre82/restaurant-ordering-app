@@ -7,11 +7,11 @@ public record CreateUserDTO(
 
         @NotNull
         @NotBlank
-        String userRoleId,
+        String userRoleName,
 
         @NotNull
         @NotBlank
-        String userName,
+        String username,
 
         @NotNull
         @NotBlank

@@ -16,7 +16,7 @@ public record FullUserDTO(
 
         @NotNull
         @NotBlank
-        String userName,
+        String username,
 
         @NotNull
         @NotBlank

@@ -1,12 +1,16 @@
 package com.restaurant.restaurantorderingapp.models.user;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.List;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -15,19 +19,27 @@ public class User {
 
     @OneToOne(targetEntity = UserRole.class)
     @JoinColumn(name = "user_role_id")
-    private UserRole userRole;
+    private final UserRole userRole;
 
-    @Column(name = "user_name")
-    private String userName;
+    @Column(name = "username", unique = true)
+    private String username;
 
     @Column(name = "user_email", unique = true)
     private String userEmail;
 
     @Column(name = "user_password")
-    private String userPassword;
+    private String password;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<UserAddress> userAddresses;
+
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(getUserRole().getUserRoleName()));
+    }
+
+    public User(UserRole userRole) {
+        this.userRole = userRole;
+    }
 
     public String getUserId() {
         return userId;
@@ -37,16 +49,13 @@ public class User {
         return userRole;
     }
 
-    public void setUserRole(UserRole userRole) {
-        this.userRole = userRole;
+    @Override
+    public String getUsername() {
+        return username;
     }
 
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getUserEmail() {
@@ -57,12 +66,13 @@ public class User {
         this.userEmail = userEmail;
     }
 
-    public String getUserPassword() {
-        return userPassword;
+    @Override
+    public String getPassword() {
+        return password;
     }
 
-    public void setUserPassword(String userPassword) {
-        this.userPassword = userPassword;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public List<UserAddress> getUserAddresses() {
@@ -73,4 +83,23 @@ public class User {
         this.userAddresses = userAddresses;
     }
 
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

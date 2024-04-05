@@ -3,7 +3,7 @@ package com.restaurant.restaurantorderingapp.dto.usersDto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record UpdateUserDTO (
+public record SignInUserDTO (
 
         @NotNull
         @NotBlank
@@ -11,5 +11,9 @@ public record UpdateUserDTO (
 
         @NotNull
         @NotBlank
-        String userEmail
+        String password,
+
+        @NotNull
+        @NotBlank
+        String userRoleName
 ){}
