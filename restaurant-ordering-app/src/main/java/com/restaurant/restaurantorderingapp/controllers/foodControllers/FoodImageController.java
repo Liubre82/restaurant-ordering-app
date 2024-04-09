@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/foodImages")
 public class FoodImageController {
 
     private final String entityName = "Food Image";
@@ -26,20 +25,20 @@ public class FoodImageController {
     }
 
     // curl -i -s http://localhost:8080/api/foodImages | sed -e 's/{/\n&/g'
-    @GetMapping
+    @GetMapping("/public/foodImages")
     public ResponseEntity<List<FoodImageDTO>> getFoodImages() {
         List<FoodImageDTO> foodImages = foodImageService.getAllFoodImages();
         return ResponseEntity.ok(foodImages);
     }
 
-    @GetMapping("/{foodImageId}")
+    @GetMapping("/public/foodImages/{foodImageId}")
     public ResponseEntity<FoodImageDTO> getFoodImage(@PathVariable Long foodImageId) {
         FoodImageDTO foodImageDTO = foodImageService.getFoodImageById(foodImageId);
         return ResponseEntity.ok(foodImageDTO);
     }
 
     // curl -i -X POST -H "Content-Type: application/json" -d '{"foodImageName": "XXL"}' http://localhost:8080/api/foodImages
-    @PostMapping
+    @PostMapping("/admin/foodImages")
     public ResponseEntity<String> createFoodImage(
             @RequestBody @Valid CreateFoodImageDTO CreateFoodImageDTO) {
         foodImageService.createFoodImages(CreateFoodImageDTO);
@@ -49,7 +48,7 @@ public class FoodImageController {
     }
 
     // curl -i -X DELETE http://localhost:8080/api/foodImages/7
-    @DeleteMapping("/{foodImageId}")
+    @DeleteMapping("/admin/foodImages/{foodImageId}")
     public ResponseEntity<String> deleteFoodImage(@PathVariable Long foodImageId) {
         foodImageService.deleteFoodImage(foodImageId);
         return ResponseEntity
@@ -57,7 +56,7 @@ public class FoodImageController {
                 .body(entityName + " deleted successfully.");
     }
 
-    @PutMapping("/{foodImageId}")
+    @PutMapping("/admin/foodImages/{foodImageId}")
     public ResponseEntity<FoodImageDTO> updateFoodImage(
             @PathVariable Long foodImageId, @RequestBody @Valid UpdateFoodImageDTO updateFoodImageDTO) {
         FoodImageDTO foodImageDTO = foodImageService.updateFoodImage(foodImageId, updateFoodImageDTO);

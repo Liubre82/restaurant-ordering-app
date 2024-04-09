@@ -9,17 +9,17 @@ import lombok.Data;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ReqRes {
+public class AuthReqRes {
 
     private int statusCode;
     private String error;
     private String message;
-    private String token;
+    private String accessToken;
     private String refreshToken;
     private String expirationTime;
     private String username;
     private String email;
-    private String role;
+    private String userRoleName;
     private String password;
     private User user;
 }

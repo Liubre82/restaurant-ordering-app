@@ -1,4 +1,4 @@
-package com.restaurant.restaurantorderingapp.configurations;
+package com.restaurant.restaurantorderingapp.configurations.authConfigs;
 
 import com.restaurant.restaurantorderingapp.services.userServices.UserService;
 import com.restaurant.restaurantorderingapp.utils.auth.JWTUtils;
@@ -35,15 +35,16 @@ public class JWTAuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         final String authHeader = request.getHeader("Authorization");
         final  String jwtToken;
-        final String username;
+        final String userId;
         if (authHeader == null || authHeader.isBlank()) {
             filterChain.doFilter(request, response);
             return;
         }
         jwtToken = authHeader.substring(7);
-        username = jwtUtils.extractUsername(jwtToken);
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userService.loadUserByUsername(username);
+        userId = jwtUtils.extractUserId(jwtToken);
+
+        if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = userService.loadUserByUsername(userId);
 
             if (jwtUtils.isTokenValid(jwtToken, userDetails)) {
                 SecurityContext securityContext = SecurityContextHolder.createEmptyContext();

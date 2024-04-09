@@ -19,7 +19,7 @@ public class User implements UserDetails {
 
     @OneToOne(targetEntity = UserRole.class)
     @JoinColumn(name = "user_role_id")
-    private final UserRole userRole;
+    private UserRole userRole;
 
     @Column(name = "username", unique = true)
     private String username;
@@ -40,6 +40,8 @@ public class User implements UserDetails {
     public User(UserRole userRole) {
         this.userRole = userRole;
     }
+
+    public User() {}
 
     public String getUserId() {
         return userId;

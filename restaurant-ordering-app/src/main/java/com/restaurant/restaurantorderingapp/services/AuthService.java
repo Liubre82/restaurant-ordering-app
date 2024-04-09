@@ -1,8 +1,9 @@
 package com.restaurant.restaurantorderingapp.services;
 
-import com.restaurant.restaurantorderingapp.dto.ReqRes;
+import com.restaurant.restaurantorderingapp.dto.AuthReqRes;
 import com.restaurant.restaurantorderingapp.dto.usersDto.CreateUserDTO;
 import com.restaurant.restaurantorderingapp.dto.usersDto.SignInUserDTO;
+import com.restaurant.restaurantorderingapp.exceptions.customExceptions.DuplicateKeyException;
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.NotFoundException;
 import com.restaurant.restaurantorderingapp.models.user.User;
 import com.restaurant.restaurantorderingapp.models.user.UserRole;
@@ -49,43 +50,54 @@ public class AuthService {
                 .orElseThrow(() -> new NotFoundException("User", username));
     }
 
-    public ReqRes signUp(CreateUserDTO createUserDTO){
-        ReqRes resp = new ReqRes();
-
-        try {
-           UserRole userRole = findUserRoleByName(createUserDTO.userRoleName());
-            User user = new User(userRole);
-            user.setUsername(createUserDTO.username());
-            user.setUserEmail(createUserDTO.userEmail());
-            user.setPassword(passwordEncoder.encode(createUserDTO.userPassword()));
-            User createddUser = userRepository.save(user);
-
-            if (createddUser != null) {
-                resp.setUser(createddUser);
-                resp.setMessage("User created Successfully");
-                resp.setStatusCode(200);
-            }
-        }catch (Exception e){
-            resp.setStatusCode(500);
-            resp.setError(e.getMessage());
-        }
-        return resp;
+    /**
+     * Retrieves a User entity with the given id.
+     *
+     * @param userId is an id of type String that uniquely identifies a users address entity.
+     * @return a User entity.
+     * @throws NotFoundException if the userId is not found/doesn't exist in our db/context.
+     */
+    public User findUserById(String userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("User", userId));
     }
 
-    public ReqRes signIn(SignInUserDTO signInUserDTO){
-        ReqRes response = new ReqRes();
+    public AuthReqRes signUp(CreateUserDTO createUserDTO){
+        AuthReqRes response = new AuthReqRes();
+
+        UserRole userRole = findUserRoleByName(createUserDTO.userRoleName());
+        boolean usernameExist = userRepository.existsByUsername(createUserDTO.username());
+        if(usernameExist) throw new DuplicateKeyException("Username already exists! Cannot create user.", createUserDTO.username());
+        boolean userEmailExist = userRepository.existsByUserEmail(createUserDTO.userEmail());
+        if(userEmailExist) throw new DuplicateKeyException("Email already exists! Cannot create user.", createUserDTO.userEmail());
+
+        User user = new User(userRole);
+        user.setUsername(createUserDTO.username());
+        user.setUserEmail(createUserDTO.userEmail());
+        user.setPassword(passwordEncoder.encode(createUserDTO.password()));
+        User createddUser = userRepository.save(user);
+        response.setUser(createddUser);
+        response.setMessage("User created Successfully");
+        response.setStatusCode(200);
+        return response;
+    }
+
+    public AuthReqRes signIn(SignInUserDTO signInUserDTO){
+        AuthReqRes response = new AuthReqRes();
 
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signInUserDTO.username(),signInUserDTO.password()));
             User user = findUserByUsername(signInUserDTO.username());
+
             System.out.println("USER IS: "+ user);
-            var jwt = jwtUtils.generateToken(user);
+            var jwt = jwtUtils.generateAccessToken(user);
             var refreshToken = jwtUtils.generateRefreshToken(new HashMap<>(), user);
+            //response.setUser(user);
             response.setStatusCode(200);
-            response.setToken(jwt);
+            response.setAccessToken(jwt);
             response.setRefreshToken(refreshToken);
-            response.setExpirationTime("24Hr");
-            response.setRole(user.getUserRole().getUserRoleName());
+            response.setExpirationTime("6Hr");
+            response.setUserRoleName(user.getUserRole().getUserRoleName());
             response.setMessage("Successfully Signed In");
         }catch (Exception e){
             response.setStatusCode(500);
@@ -94,17 +106,17 @@ public class AuthService {
         return response;
     }
 
-    public ReqRes refreshToken(ReqRes refreshTokenRequest){
-        ReqRes response = new ReqRes();
-        String extractUsername = jwtUtils.extractUsername(refreshTokenRequest.getToken());
-        User user = findUserByUsername(extractUsername);
-        if (jwtUtils.isTokenValid(refreshTokenRequest.getToken(), user)) {
-            var jwt = jwtUtils.generateToken(user);
+    public AuthReqRes refreshToken(AuthReqRes refreshTokenRequest){
+        AuthReqRes response = new AuthReqRes();
+        String extractUserId = jwtUtils.extractUserId(refreshTokenRequest.getAccessToken());
+        User user = findUserById(extractUserId);
+        if (jwtUtils.isTokenValid(refreshTokenRequest.getAccessToken(), user)) {
+            var jwt = jwtUtils.generateAccessToken(user);
             response.setStatusCode(200);
-            response.setToken(jwt);
-            response.setRefreshToken(refreshTokenRequest.getToken());
-            response.setExpirationTime("24Hr");
-            response.setRole(user.getUserRole().getUserRoleName());
+            response.setAccessToken(jwt);
+            response.setRefreshToken(refreshTokenRequest.getAccessToken());
+            response.setExpirationTime("6Hr");
+            response.setUserRoleName(user.getUserRole().getUserRoleName());
             response.setMessage("Successfully Refreshed Token");
         }
         response.setStatusCode(500);

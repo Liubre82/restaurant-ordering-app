@@ -6,7 +6,7 @@ public class DuplicateKeyException extends RuntimeException {
         super("entity must be unique, create UNSUCCESSFUL! duplicate entry: " + duplicateName);
     }
 
-    public DuplicateKeyException(String duplicateName, String msg) {
+    public DuplicateKeyException(String msg, String duplicateName) {
         super(msg + " Duplicate: " + duplicateName);
     }
 

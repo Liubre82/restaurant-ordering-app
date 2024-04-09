@@ -19,5 +19,5 @@ public record CreateUserDTO(
 
         @NotNull
         @NotBlank
-        String userPassword
+        String password
 ) {}

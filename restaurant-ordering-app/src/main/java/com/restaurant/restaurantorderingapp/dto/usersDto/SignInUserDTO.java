@@ -11,9 +11,5 @@ public record SignInUserDTO (
 
         @NotNull
         @NotBlank
-        String password,
-
-        @NotNull
-        @NotBlank
-        String userRoleName
+        String password
 ){}

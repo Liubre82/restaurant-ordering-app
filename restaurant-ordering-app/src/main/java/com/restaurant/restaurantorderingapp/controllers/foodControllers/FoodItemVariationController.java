@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/foodItemVariations")
 public class FoodItemVariationController {
 
     private final String entityName = "Food Item Variation";
@@ -26,20 +25,20 @@ public class FoodItemVariationController {
     }
 
     // curl -i -s http://localhost:8080/api/foodItemVariations | sed -e 's/{/\n&/g'
-    @GetMapping
+    @GetMapping("/public/foodItemVariations")
     public ResponseEntity<List<FoodItemVariationDTO>> getFoodItemVariations() {
         List<FoodItemVariationDTO> foodItemVariations = foodItemVariationService.getAllFoodItemVariations();
         return ResponseEntity.ok(foodItemVariations);
     }
 
-    @GetMapping("/{foodItemVariationId}")
+    @GetMapping("/public/foodItemVariations/{foodItemVariationId}")
     public ResponseEntity<FoodItemVariationDTO> getFoodItemVariation(@PathVariable Long foodItemVariationId) {
         FoodItemVariationDTO foodItemVariationDTO = foodItemVariationService.getFoodItemVariationById(foodItemVariationId);
         return ResponseEntity.ok(foodItemVariationDTO);
     }
 
     // curl -i -X POST -H "Content-Type: application/json" -d '{"foodItemVariationName": "XXL"}' http://localhost:8080/api/foodItemVariations
-    @PostMapping
+    @PostMapping("/admin/foodItemVariations")
     public ResponseEntity<String> createFoodItemVariation(
             @RequestBody @Valid CreateFoodItemVariationDTO CreateFoodItemVariationDTO) {
         foodItemVariationService.createFoodItemVariation(CreateFoodItemVariationDTO);
@@ -49,7 +48,7 @@ public class FoodItemVariationController {
     }
 
     // curl -i -X DELETE http://localhost:8080/api/foodItemVariations/7
-    @DeleteMapping("/{foodItemVariationId}")
+    @DeleteMapping("/admin/foodItemVariations/{foodItemVariationId}")
     public ResponseEntity<String> deleteFoodItemVariation(@PathVariable Long foodItemVariationId) {
         foodItemVariationService.deleteFoodItemVariation(foodItemVariationId);
         return ResponseEntity
@@ -57,7 +56,7 @@ public class FoodItemVariationController {
                 .body(entityName + " deleted successfully.");
     }
 
-    @PutMapping("/{foodItemVariationId}")
+    @PutMapping("/admin/foodItemVariations/{foodItemVariationId}")
     public ResponseEntity<FoodItemVariationDTO> updateFoodItemVariation(
             @PathVariable Long foodItemVariationId, @RequestBody @Valid UpdateFoodItemVariationDTO updateFoodItemVariationDTO) {
         FoodItemVariationDTO foodItemVariationDTO = foodItemVariationService.updateFoodItemVariation(foodItemVariationId, updateFoodItemVariationDTO);

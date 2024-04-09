@@ -15,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,12 +97,13 @@ public class FoodImageControllerTest extends BaseControllerTest {
 
     @Test
     @DisplayName("SUCCESSFULLY GET ALL food images.")
+    @WithMockUser(username = "user1", password = "pwd", roles = "ADMIN")
     @Order(3)
     public void testGetFoodImagesSuccess() throws Exception {
         String responseBody = objectMapper.writeValueAsString(foodImageTestEntityList);
-
+        String route = "/public/foodImages";
         when(foodImageService.getAllFoodImages()).thenReturn(foodImageTestEntityList);
-        getRequestSuccessTest(END_POINT_PATH, responseBody);
+        getRequestSuccessTest(route, responseBody);
         verify(foodImageService).getAllFoodImages();
     }
 

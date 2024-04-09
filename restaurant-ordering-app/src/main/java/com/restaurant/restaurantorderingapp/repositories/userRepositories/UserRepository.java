@@ -17,5 +17,9 @@ public interface UserRepository extends CrudRepository<User, String> {
     @Query("SELECT COUNT(u) > 0 FROM User u WHERE u.userEmail = :userEmail")
     boolean existsByUserEmail(String userEmail);
 
+    @Query("SELECT COUNT(u) > 0 FROM User u WHERE u.username = :username")
+    boolean existsByUsername(String username);
+
+    @Query("SELECT u FROM User u WHERE u.username = :username")
     Optional<User> findByUsername(String username);
 }

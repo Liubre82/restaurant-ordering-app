@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/foodSizes")
 public class FoodSizeController {
 
     private final FoodSizeService foodSizeService;
@@ -24,27 +23,27 @@ public class FoodSizeController {
     }
 
     // curl -i -s http://localhost:8080/api/foodSizes | sed -e 's/{/\n&/g'
-    @GetMapping
+    @GetMapping("/public/foodSizes")
     public ResponseEntity<List<FoodSizeDTO>> getFoodSizes() {
         List<FoodSizeDTO> foodSizes = foodSizeService.getAllFoodSizes();
         return ResponseEntity.ok(foodSizes);
     }
 
-    @GetMapping("/search")
+    @GetMapping("/public/foodSizes/search")
     public ResponseEntity<List<FoodSizeDTO>> searchFoodSizes(
             @RequestParam String searchInput) {
         List<FoodSizeDTO> foodSizes = foodSizeService.searchFoodSizes(searchInput);
         return foodSizes.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(foodSizes);
     }
 
-    @GetMapping("/{foodSizeId}")
+    @GetMapping("/public/foodSizes/{foodSizeId}")
     public ResponseEntity<FoodSizeDTO> getFoodSize(@PathVariable Long foodSizeId) {
         FoodSizeDTO foodSizeDTO = foodSizeService.getFoodSizeById(foodSizeId);
         return ResponseEntity.ok(foodSizeDTO);
     }
 
     // curl -i -X POST -H "Content-Type: application/json" -d '{"foodSizeName": "XXL"}' http://localhost:8080/api/foodSizes
-    @PostMapping
+    @PostMapping("/admin/foodSizes")
     public ResponseEntity<String> createFoodSize(
             @RequestBody @Valid CreateFoodSizeDTO CreateFoodSizeDTO) {
         foodSizeService.createFoodSizes(CreateFoodSizeDTO);
@@ -54,7 +53,7 @@ public class FoodSizeController {
     }
 
     // curl -i -X DELETE http://localhost:8080/api/foodSizes/7
-    @DeleteMapping("/{foodSizeId}")
+    @DeleteMapping("/admin/foodSizes/{foodSizeId}")
     public ResponseEntity<String> deleteFoodSize(@PathVariable Long foodSizeId) {
         foodSizeService.deleteFoodSize(foodSizeId);
         return ResponseEntity
@@ -62,7 +61,7 @@ public class FoodSizeController {
                 .body("Food Size deleted successfully.");
     }
 
-    @PutMapping("/{foodSizeId}")
+    @PutMapping("/admin/foodSizes/{foodSizeId}")
     public ResponseEntity<FoodSizeDTO> updateFoodSize(
             @PathVariable Long foodSizeId, @RequestBody @Valid UpdateFoodSizeDTO updateFoodSizeDTO) {
         FoodSizeDTO foodSizeDTO = foodSizeService.updateFoodSize(foodSizeId, updateFoodSizeDTO);

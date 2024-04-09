@@ -1,5 +1,6 @@
 package com.restaurant.restaurantorderingapp.utils.auth;
 
+import com.restaurant.restaurantorderingapp.models.user.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,34 +18,39 @@ import java.util.function.Function;
 public class JWTUtils {
 
     private SecretKey Key;
-    private  static  final long EXPIRATION_TIME = 86400000; //24hours or 86400000 millisecond
+    private  static  final long ACCESS_EXPIRATION_TIME = 21600000; //6hours or 21600000 millisecond
+    private  static  final long REFRESH_EXPIRATION_TIME = 86400000; //24hours or 86400000 millisecond
+
     public JWTUtils(){
         String secreteString = "843567893696976453275974432697R634976R738467TR678T34865R6834R8763T478378637664538745673865783678548735687R3";
         byte[] keyBytes = Base64.getDecoder().decode(secreteString.getBytes(StandardCharsets.UTF_8));
         this.Key = new SecretKeySpec(keyBytes, "HmacSHA256");
     }
 
-    public String generateToken(UserDetails userDetails){
+    public String generateAccessToken(UserDetails userDetails){
+        User user = (User) userDetails;
         return Jwts.builder()
-                .subject(userDetails.getUsername())
-                .subject(userDetails.getAuthorities().toString())
+                .subject(user.getUserId())
+                .claim("username", user.getUsername())
+                .claim("userEmail", user.getUserEmail())
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(Key)
-                .compact();
-    }
-    public String generateRefreshToken(HashMap<String, Object> claims, UserDetails userDetails){
-        return Jwts.builder()
-                .claims(claims)
-                .subject(userDetails.getUsername())
-                .subject(userDetails.getAuthorities().toString())
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .expiration(new Date(System.currentTimeMillis() + ACCESS_EXPIRATION_TIME))
                 .signWith(Key)
                 .compact();
     }
 
-    public String extractUsername(String token){
+    public String generateRefreshToken(HashMap<String, Object> claims, UserDetails userDetails){
+        User user = (User) userDetails;
+        return Jwts.builder()
+                .claims(claims)
+                .subject(user.getUserId())
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + REFRESH_EXPIRATION_TIME))
+                .signWith(Key)
+                .compact();
+    }
+
+    public String extractUserId(String token){
         return extractClaims(token, Claims::getSubject);
     }
     private <T> T extractClaims(String token, Function<Claims, T> claimsTFunction){
@@ -52,8 +58,9 @@ public class JWTUtils {
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails){
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        User user = (User) userDetails;
+        final String userId = extractUserId(token);
+        return (userId.equals(user.getUserId()) && !isTokenExpired(token));
     }
     public boolean isTokenExpired(String token){
         return extractClaims(token, Claims::getExpiration).before(new Date());
