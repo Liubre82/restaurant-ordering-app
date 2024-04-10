@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/userRestaurantReviews")
 public class UserRestaurantReviewController {
 
     private final String entityName = "User Restaurant Review";
@@ -27,20 +26,20 @@ public class UserRestaurantReviewController {
 
     // curl -i -s http://localhost:8080/api/userRestaurantReviewes | sed -e 's/{/\n&/g'
     //Method should not be accessible to any users,
-    @GetMapping
+    @GetMapping("/public/userRestaurantReviews")
     public ResponseEntity<List<UserRestaurantReviewDTO>> getUserRestaurantReviews() {
-        List<UserRestaurantReviewDTO> userRestaurantReviewes = userRestaurantReviewService.getAllUserRestaurantReviews();
-        return ResponseEntity.ok(userRestaurantReviewes);
+        List<UserRestaurantReviewDTO> userRestaurantReviews = userRestaurantReviewService.getAllUserRestaurantReviews();
+        return ResponseEntity.ok(userRestaurantReviews);
     }
 
-    @GetMapping("/{userRestaurantReviewId}")
+    @GetMapping("/public/userRestaurantReviews/{userRestaurantReviewId}")
     public ResponseEntity<UserRestaurantReviewDTO> getUserRestaurantReview(@PathVariable Long userRestaurantReviewId) {
         UserRestaurantReviewDTO userRestaurantReviewDTO = userRestaurantReviewService.getUserRestaurantReviewById(userRestaurantReviewId);
         return ResponseEntity.ok(userRestaurantReviewDTO);
     }
 
     // curl -i -X POST -H "Content-Type: application/json" -d '{"userRestaurantReviewName": "XXL"}' http://localhost:8080/api/userRestaurantReviewes
-    @PostMapping
+    @PostMapping("/authUsers/userRestaurantReviews")
     public ResponseEntity<String> createUserRestaurantReview(
             @RequestBody @Valid CreateUserRestaurantReviewDTO CreateUserRestaurantReviewDTO) {
         userRestaurantReviewService.createUserRestaurantReview(CreateUserRestaurantReviewDTO);
@@ -50,7 +49,7 @@ public class UserRestaurantReviewController {
     }
 
     // curl -i -X DELETE http://localhost:8080/api/userRestaurantReviewes/7
-    @DeleteMapping("/{userRestaurantReviewId}")
+    @DeleteMapping("/authUsers/userRestaurantReviews/{userRestaurantReviewId}")
     public ResponseEntity<String> deleteUserRestaurantReview(@PathVariable Long userRestaurantReviewId) {
         userRestaurantReviewService.deleteUserRestaurantReview(userRestaurantReviewId);
         return ResponseEntity
@@ -58,7 +57,7 @@ public class UserRestaurantReviewController {
                 .body(entityName + " deleted successfully.");
     }
 
-    @PutMapping("/{userRestaurantReviewId}")
+    @PutMapping("/authUsers/userRestaurantReviews/{userRestaurantReviewId}")
     public ResponseEntity<UserRestaurantReviewDTO> updateUserRestaurantReview(
             @PathVariable Long userRestaurantReviewId, @RequestBody @Valid UpdateUserRestaurantReviewDTO updateUserRestaurantReviewDTO) {
         UserRestaurantReviewDTO userRestaurantReviewDTO = userRestaurantReviewService.updateUserRestaurantReview(userRestaurantReviewId, updateUserRestaurantReviewDTO);

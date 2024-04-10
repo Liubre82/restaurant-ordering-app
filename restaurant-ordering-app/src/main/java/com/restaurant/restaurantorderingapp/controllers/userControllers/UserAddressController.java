@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/userAddresses")
 public class UserAddressController {
 
     private final String entityName = "User Address";
@@ -27,20 +26,20 @@ public class UserAddressController {
 
     // curl -i -s http://localhost:8080/api/userAddresses | sed -e 's/{/\n&/g'
     //Method should not be accessible to any users,
-    @GetMapping
+    @GetMapping("/admin/userAddresses")
     public ResponseEntity<List<UserAddressDTO>> getUserAddresses() {
         List<UserAddressDTO> userAddresses = userAddressService.getAllUserAddresses();
         return ResponseEntity.ok(userAddresses);
     }
 
-    @GetMapping("/{userAddressId}")
+    @GetMapping("/authUsers/userAddresses/{userAddressId}")
     public ResponseEntity<UserAddressDTO> getUserAddress(@PathVariable Long userAddressId) {
         UserAddressDTO userAddressDTO = userAddressService.getUserAddressById(userAddressId);
         return ResponseEntity.ok(userAddressDTO);
     }
 
     // curl -i -X POST -H "Content-Type: application/json" -d '{"userAddressName": "XXL"}' http://localhost:8080/api/userAddresses
-    @PostMapping
+    @PostMapping("/authUsers/userAddresses")
     public ResponseEntity<String> createUserAddress(
             @RequestBody @Valid CreateUserAddressDTO CreateUserAddressDTO) {
         userAddressService.createUserAddress(CreateUserAddressDTO);
@@ -50,7 +49,7 @@ public class UserAddressController {
     }
 
     // curl -i -X DELETE http://localhost:8080/api/userAddresses/7
-    @DeleteMapping("/{userAddressId}")
+    @DeleteMapping("/authUsers/userAddresses/{userAddressId}")
     public ResponseEntity<String> deleteUserAddress(@PathVariable Long userAddressId) {
         userAddressService.deleteUserAddress(userAddressId);
         return ResponseEntity
@@ -58,7 +57,7 @@ public class UserAddressController {
                 .body(entityName + " deleted successfully.");
     }
 
-    @PutMapping("/{userAddressId}")
+    @PutMapping("/authUsers/userAddresses/{userAddressId}")
     public ResponseEntity<UserAddressDTO> updateUserAddress(
             @PathVariable Long userAddressId, @RequestBody @Valid UpdateUserAddressDTO updateUserAddressDTO) {
         UserAddressDTO userAddressDTO = userAddressService.updateUserAddress(userAddressId, updateUserAddressDTO);

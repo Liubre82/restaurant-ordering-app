@@ -1,7 +1,6 @@
 package com.restaurant.restaurantorderingapp.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.restaurant.restaurantorderingapp.controllers.foodControllers.MenuCategoryController;
 import com.restaurant.restaurantorderingapp.dto.menuCategoriesDto.CreateMenuCategoryDTO;
 import com.restaurant.restaurantorderingapp.dto.menuCategoriesDto.MenuCategoryDTO;
 import com.restaurant.restaurantorderingapp.dto.menuCategoriesDto.UpdateMenuCategoryDTO;
@@ -11,7 +10,6 @@ import com.restaurant.restaurantorderingapp.exceptions.customExceptions.NotFound
 import com.restaurant.restaurantorderingapp.services.foodServices.MenuCategoryService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -27,7 +25,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@WebMvcTest(MenuCategoryController.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class MenuCategoryControllerTest extends BaseControllerTest{
 
@@ -66,8 +63,9 @@ public class MenuCategoryControllerTest extends BaseControllerTest{
         CreateMenuCategoryDTO createMenuCategoryDTO = new CreateMenuCategoryDTO("testing");
         String requestBody = objectMapper.writeValueAsString(createMenuCategoryDTO);
 
+        String endpoint = "/admin" +END_POINT_PATH;
         doNothing().when(menuCategoryService).createMenuCategories(createMenuCategoryDTO);
-        createRequestSuccessTest(END_POINT_PATH, requestBody);
+        createRequestSuccessTest(endpoint, requestBody);
         verify(menuCategoryService).createMenuCategories(createMenuCategoryDTO);
     }
 
@@ -76,7 +74,7 @@ public class MenuCategoryControllerTest extends BaseControllerTest{
     @Order(2)
     public void testGetMenuCategorySuccess() throws Exception{
         Long menuCategoryId = 1L;
-        String requestURI = requestURIBuilder(END_POINT_PATH, menuCategoryId);
+        String requestURI = "/public" + requestURIBuilder(END_POINT_PATH, menuCategoryId);
         String responseBody = objectMapper.writeValueAsString(menuCategoryTestEntity1);
 
         when(menuCategoryService.getMenuCategoryById(menuCategoryId))
@@ -91,8 +89,9 @@ public class MenuCategoryControllerTest extends BaseControllerTest{
     public void testGetMenuCategoriesSuccess() throws Exception {
         String responseBody = objectMapper.writeValueAsString(menuCategoryTestEntityList);
 
+        String endpoint = "/public" + END_POINT_PATH;
         when(menuCategoryService.getAllMenuCategories()).thenReturn(menuCategoryTestEntityList);
-        getRequestSuccessTest(END_POINT_PATH, responseBody);
+        getRequestSuccessTest(endpoint, responseBody);
         verify(menuCategoryService).getAllMenuCategories();
     }
 
@@ -101,7 +100,7 @@ public class MenuCategoryControllerTest extends BaseControllerTest{
     @Order(4)
     public void testSearchMenuCategoriesSuccess() throws Exception {
         String searchInput = "es";
-        String requestURI = END_POINT_PATH + "/search?searchInput=" + searchInput;
+        String requestURI = "/public" + END_POINT_PATH + "/search?searchInput=" + searchInput;
         List<MenuCategoryDTO> searchList = new ArrayList<>();
         searchList.add(menuCategoryTestEntity2);
         searchList.add(menuCategoryTestEntity3);
@@ -117,7 +116,7 @@ public class MenuCategoryControllerTest extends BaseControllerTest{
     @Order(5)
     public void testUpdateMenuCategorySuccess() throws Exception {
         Long menuCategoryId = 1L;
-        String requestURI = requestURIBuilder(END_POINT_PATH, menuCategoryId);
+        String requestURI = "/admin" + requestURIBuilder(END_POINT_PATH, menuCategoryId);
 
         UpdateMenuCategoryDTO updateMenuCategoryDTO = new UpdateMenuCategoryDTO("UpdateTest");
         String requestBody = objectMapper.writeValueAsString(updateMenuCategoryDTO);
@@ -136,7 +135,7 @@ public class MenuCategoryControllerTest extends BaseControllerTest{
     @Order(6)
     public void testDeleteMenuCategorySuccess() throws Exception {
         Long menuCategoryId = 1L;
-        String requestURI = requestURIBuilder(END_POINT_PATH, menuCategoryId);
+        String requestURI = "/admin" + requestURIBuilder(END_POINT_PATH, menuCategoryId);
 
         doNothing().when(menuCategoryService).deleteMenuCategory(menuCategoryId);
         deleteRequestSuccessTest(requestURI, entityName);
@@ -151,7 +150,7 @@ public class MenuCategoryControllerTest extends BaseControllerTest{
     @Order(7)
     public void testGetMenuCategoryNotFoundError() throws Exception {
         Long menuCategoryId = 1255624L;
-        String requestURI = requestURIBuilder(END_POINT_PATH, menuCategoryId);
+        String requestURI = "/public" + requestURIBuilder(END_POINT_PATH, menuCategoryId);
 
         /* Our getMenuCategoryById should throw a NotFoundException with a custom msg, so here we
         * create an instance of the exception and pass the parameters it needs to create the custom msg.*/
@@ -165,7 +164,7 @@ public class MenuCategoryControllerTest extends BaseControllerTest{
     @Order(8)
     public void testUpdateMenuCategoryNotFoundError() throws Exception {
         Long menuCategoryId = 10432L;
-        String requestURI = requestURIBuilder(END_POINT_PATH, menuCategoryId);
+        String requestURI = "/admin" + requestURIBuilder(END_POINT_PATH, menuCategoryId);
 
         UpdateMenuCategoryDTO updateMenuCategoryDTO = new UpdateMenuCategoryDTO("UpdateTest");
         String requestBody = objectMapper.writeValueAsString(updateMenuCategoryDTO);
@@ -182,7 +181,7 @@ public class MenuCategoryControllerTest extends BaseControllerTest{
     @Order(9)
     public void testDeleteMenuCategoryNotFoundError() throws Exception {
         Long menuCategoryId = 102L;
-        String requestURI = requestURIBuilder(END_POINT_PATH, menuCategoryId);
+        String requestURI = "/admin" + requestURIBuilder(END_POINT_PATH, menuCategoryId);
 
         doThrow(new NotFoundException(entityName, menuCategoryId))
                 .when(menuCategoryService).deleteMenuCategory(menuCategoryId);
@@ -196,8 +195,10 @@ public class MenuCategoryControllerTest extends BaseControllerTest{
     @Order(10)
     public void testGetMenuCategoriesEmptyDataTableError() throws Exception {
         String statusCode = String.valueOf(HttpStatus.NOT_FOUND.value());
+
+        String endpoint = "/public" +END_POINT_PATH;
         when(menuCategoryService.getAllMenuCategories()).thenThrow(new EmptyDataTableException(tableName));
-        emptyDataTableExceptionTest(END_POINT_PATH, statusCode, tableName);
+        emptyDataTableExceptionTest(endpoint, statusCode, tableName);
         verify(menuCategoryService).getAllMenuCategories();
     }
 
@@ -210,8 +211,9 @@ public class MenuCategoryControllerTest extends BaseControllerTest{
         CreateMenuCategoryDTO createMenuCategoryDTO = new CreateMenuCategoryDTO(duplicateName);
         String requestBody = objectMapper.writeValueAsString(createMenuCategoryDTO);
 
+        String endpoint = "/admin" +END_POINT_PATH;
         doThrow(new DuplicateKeyException(duplicateName)).when(menuCategoryService).createMenuCategories(createMenuCategoryDTO);
-        duplicateKeyExceptionTest(END_POINT_PATH, requestBody, duplicateName);
+        duplicateKeyExceptionTest(endpoint, requestBody, duplicateName);
         verify(menuCategoryService).createMenuCategories(createMenuCategoryDTO);
     }
 
@@ -223,8 +225,10 @@ public class MenuCategoryControllerTest extends BaseControllerTest{
         CreateMenuCategoryDTO createMenuCategoryDTO = new CreateMenuCategoryDTO("");
         String requestBody = objectMapper.writeValueAsString(createMenuCategoryDTO);
 
-        mockMvc.perform(post(END_POINT_PATH)
+        String endpoint = "/admin" +END_POINT_PATH;
+        mockMvc.perform(post(endpoint)
                         .contentType("application/json")
+                        .characterEncoding("utf-8")
                         .content(requestBody))
                 .andDo(print())
                 .andExpect(status().isBadRequest())

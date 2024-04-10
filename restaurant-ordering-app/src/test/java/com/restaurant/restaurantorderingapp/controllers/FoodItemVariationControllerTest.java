@@ -1,7 +1,6 @@
 package com.restaurant.restaurantorderingapp.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.restaurant.restaurantorderingapp.controllers.foodControllers.FoodItemVariationController;
 import com.restaurant.restaurantorderingapp.dto.foodItemVariationsDto.CreateFoodItemVariationDTO;
 import com.restaurant.restaurantorderingapp.dto.foodItemVariationsDto.FoodItemVariationDTO;
 import com.restaurant.restaurantorderingapp.dto.foodItemVariationsDto.UpdateFoodItemVariationDTO;
@@ -14,7 +13,6 @@ import com.restaurant.restaurantorderingapp.exceptions.customExceptions.NotFound
 import com.restaurant.restaurantorderingapp.services.foodServices.FoodItemVariationService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -31,7 +29,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(FoodItemVariationController.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class FoodItemVariationControllerTest extends BaseControllerTest {
 
@@ -86,8 +83,9 @@ public class FoodItemVariationControllerTest extends BaseControllerTest {
         CreateFoodItemVariationDTO createFoodItemVariationDTO = new CreateFoodItemVariationDTO("3333",foodSizeTestEntity1.foodSizeId(), BigDecimal.valueOf(22.99));
         String requestBody = objectMapper.writeValueAsString(createFoodItemVariationDTO);
 
+        String endpoint = "/admin" +END_POINT_PATH;
         doNothing().when(foodItemVariationService).createFoodItemVariation(createFoodItemVariationDTO);
-        createRequestSuccessTest(END_POINT_PATH, requestBody);
+        createRequestSuccessTest(endpoint, requestBody);
         verify(foodItemVariationService).createFoodItemVariation(createFoodItemVariationDTO);
     }
 
@@ -96,7 +94,7 @@ public class FoodItemVariationControllerTest extends BaseControllerTest {
     @Order(2)
     public void testGetFoodItemVariationSuccess() throws Exception{
         Long foodItemVariationId = 1L;
-        String requestURI = requestURIBuilder(END_POINT_PATH, foodItemVariationId);
+        String requestURI = "/public" + requestURIBuilder(END_POINT_PATH, foodItemVariationId);
         String responseBody = objectMapper.writeValueAsString(foodItemVariationTestEntity1);
 
         when(foodItemVariationService.getFoodItemVariationById(foodItemVariationId))
@@ -111,8 +109,9 @@ public class FoodItemVariationControllerTest extends BaseControllerTest {
     public void testGetFoodItemVariationsSuccess() throws Exception {
         String responseBody = objectMapper.writeValueAsString(foodItemVariationTestEntityList);
 
+        String endpoint = "/public" +END_POINT_PATH;
         when(foodItemVariationService.getAllFoodItemVariations()).thenReturn(foodItemVariationTestEntityList);
-        getRequestSuccessTest(END_POINT_PATH, responseBody);
+        getRequestSuccessTest(endpoint, responseBody);
         verify(foodItemVariationService).getAllFoodItemVariations();
     }
 
@@ -121,7 +120,7 @@ public class FoodItemVariationControllerTest extends BaseControllerTest {
     @Order(4)
     public void testUpdateFoodItemVariationSuccess() throws Exception {
         Long foodItemVariationId = 1L;
-        String requestURI = requestURIBuilder(END_POINT_PATH, foodItemVariationId);
+        String requestURI = "/admin" + requestURIBuilder(END_POINT_PATH, foodItemVariationId);
 
         UpdateFoodItemVariationDTO updateFoodItemVariationDTO = new UpdateFoodItemVariationDTO("3333",foodSizeTestEntity1.foodSizeId(), BigDecimal.valueOf(22.99));
         String requestBody = objectMapper.writeValueAsString(updateFoodItemVariationDTO);
@@ -140,7 +139,7 @@ public class FoodItemVariationControllerTest extends BaseControllerTest {
     @Order(5)
     public void testDeleteFoodItemVariationSuccess() throws Exception {
         Long foodItemVariationId = 1L;
-        String requestURI = requestURIBuilder(END_POINT_PATH, foodItemVariationId);
+        String requestURI = "/admin" + requestURIBuilder(END_POINT_PATH, foodItemVariationId);
 
         doNothing().when(foodItemVariationService).deleteFoodItemVariation(foodItemVariationId);
         deleteRequestSuccessTest(requestURI, entityName);
@@ -155,7 +154,7 @@ public class FoodItemVariationControllerTest extends BaseControllerTest {
     @Order(6)
     public void testGetFoodItemVariationNotFoundError() throws Exception {
         Long foodItemVariationId = 1255624L;
-        String requestURI = requestURIBuilder(END_POINT_PATH, foodItemVariationId);
+        String requestURI = "/public" + requestURIBuilder(END_POINT_PATH, foodItemVariationId);
 
         /* Our getFoodItemVariationById should throw a NotFoundException with a custom msg, so here we
          * create an instance of the exception and pass the parameters it needs to create the custom msg.*/
@@ -169,7 +168,7 @@ public class FoodItemVariationControllerTest extends BaseControllerTest {
     @Order(7)
     public void testUpdateFoodItemVariationNotFoundError() throws Exception {
         Long foodItemVariationId = 10432L;
-        String requestURI = requestURIBuilder(END_POINT_PATH, foodItemVariationId);
+        String requestURI = "/admin" + requestURIBuilder(END_POINT_PATH, foodItemVariationId);
 
         UpdateFoodItemVariationDTO updateFoodItemVariationDTO = new UpdateFoodItemVariationDTO(foodItemTestEntity1.foodItemId(),foodSizeTestEntity1.foodSizeId(), BigDecimal.valueOf(123.12));
         String requestBody = objectMapper.writeValueAsString(updateFoodItemVariationDTO);
@@ -186,7 +185,7 @@ public class FoodItemVariationControllerTest extends BaseControllerTest {
     @Order(8)
     public void testDeleteFoodItemVariationNotFoundError() throws Exception {
         Long foodItemVariationId = 102L;
-        String requestURI = requestURIBuilder(END_POINT_PATH, foodItemVariationId);
+        String requestURI = "/admin" + requestURIBuilder(END_POINT_PATH, foodItemVariationId);
 
         doThrow(new NotFoundException(entityName, foodItemVariationId))
                 .when(foodItemVariationService).deleteFoodItemVariation(foodItemVariationId);
@@ -200,8 +199,10 @@ public class FoodItemVariationControllerTest extends BaseControllerTest {
     @Order(9)
     public void testGetFoodItemVariationsEmptyDataTableError() throws Exception {
         String statusCode = String.valueOf(HttpStatus.NOT_FOUND.value());
+
+        String endpoint = "/public" +END_POINT_PATH;
         when(foodItemVariationService.getAllFoodItemVariations()).thenThrow(new EmptyDataTableException(tableName));
-        emptyDataTableExceptionTest(END_POINT_PATH, statusCode, tableName);
+        emptyDataTableExceptionTest(endpoint, statusCode, tableName);
         verify(foodItemVariationService).getAllFoodItemVariations();
     }
 
@@ -209,13 +210,13 @@ public class FoodItemVariationControllerTest extends BaseControllerTest {
     @DisplayName("Duplicate Food Item Variation Error Handling: CREATE a food item variation that already exist.")
     @Order(10)
     public void testCreateFoodItemVariationDuplicateError() throws Exception {
-
         String duplicateName = "new image tester";
         CreateFoodItemVariationDTO createFoodItemVariationDTO = new CreateFoodItemVariationDTO(foodItemTestEntity1.foodItemId(),foodSizeTestEntity1.foodSizeId(), BigDecimal.valueOf(123.12));
         String requestBody = objectMapper.writeValueAsString(createFoodItemVariationDTO);
 
+        String endpoint = "/admin" +END_POINT_PATH;
         doThrow(new DuplicateKeyException(duplicateName)).when(foodItemVariationService).createFoodItemVariation(createFoodItemVariationDTO);
-        duplicateKeyExceptionTest(END_POINT_PATH, requestBody, duplicateName);
+        duplicateKeyExceptionTest(endpoint, requestBody, duplicateName);
         verify(foodItemVariationService).createFoodItemVariation(createFoodItemVariationDTO);
     }
 
@@ -227,8 +228,10 @@ public class FoodItemVariationControllerTest extends BaseControllerTest {
         CreateFoodItemVariationDTO createFoodItemVariationDTO = new CreateFoodItemVariationDTO("5555", foodSizeTestEntity1.foodSizeId(), BigDecimal.valueOf(-11));
         String requestBody = objectMapper.writeValueAsString(createFoodItemVariationDTO);
 
-        mockMvc.perform(post(END_POINT_PATH)
+        String endpoint = "/admin" +END_POINT_PATH;
+        mockMvc.perform(post(endpoint)
                         .contentType("application/json")
+                        .characterEncoding("utf-8")
                         .content(requestBody))
                 .andDo(print())
                 .andExpect(status().isBadRequest())

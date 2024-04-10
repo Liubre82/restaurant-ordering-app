@@ -1,5 +1,7 @@
 package com.restaurant.restaurantorderingapp.controllers.userControllers;
 
+import com.restaurant.restaurantorderingapp.dto.userAddressesDto.UserAddressDTO;
+import com.restaurant.restaurantorderingapp.dto.userRestaurantReviewsDto.UserRestaurantReviewDTO;
 import com.restaurant.restaurantorderingapp.dto.usersDto.FullUserDTO;
 import com.restaurant.restaurantorderingapp.dto.usersDto.UpdateUserDTO;
 import com.restaurant.restaurantorderingapp.dto.usersDto.UpdateUserPasswordDTO;
@@ -49,6 +51,18 @@ public class UserController {
     public ResponseEntity<UserDTO> getUser(@PathVariable String userId) {
         UserDTO userDTO = userService.getUserById(userId);
         return ResponseEntity.ok(userDTO);
+    }
+
+    @GetMapping("/authUsers/users/{userId}/userAddresses")
+    public ResponseEntity<List<UserAddressDTO>> getUserAddressesByUserId(@PathVariable String userId) {
+        List<UserAddressDTO> userAddressDTOList = userService.getAllAddressesByUserId(userId);
+        return ResponseEntity.ok(userAddressDTOList);
+    }
+
+    @GetMapping("/authUsers/users/{userId}/userRestaurantReviews")
+    public ResponseEntity<UserRestaurantReviewDTO> getUserReviewById(@PathVariable String userId) {
+        UserRestaurantReviewDTO userRestaurantReviewDTO = userService.getReviewByUserId(userId);
+        return ResponseEntity.ok(userRestaurantReviewDTO);
     }
 
     // curl -i -X DELETE http://localhost:8080/api/users/7

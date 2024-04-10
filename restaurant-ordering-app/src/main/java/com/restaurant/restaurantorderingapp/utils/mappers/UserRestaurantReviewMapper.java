@@ -15,6 +15,7 @@ public class UserRestaurantReviewMapper {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm a");
         String formattedDateTime = userRestaurantReview.getCreatedAt().format(formatter);
         return new UserRestaurantReviewDTO(
+                userRestaurantReview.getUserRestaurantReviewId(),
                 userRestaurantReview.getUser().getUserId(),
                 userRestaurantReview.getUserRestaurantReviewTitle(),
                 userRestaurantReview.getUserRestaurantRating(),

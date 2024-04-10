@@ -1,7 +1,6 @@
 package com.restaurant.restaurantorderingapp.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.restaurant.restaurantorderingapp.controllers.foodControllers.FoodImageController;
 import com.restaurant.restaurantorderingapp.dto.foodImagesDto.CreateFoodImageDTO;
 import com.restaurant.restaurantorderingapp.dto.foodImagesDto.FoodImageDTO;
 import com.restaurant.restaurantorderingapp.dto.foodImagesDto.UpdateFoodImageDTO;
@@ -11,11 +10,9 @@ import com.restaurant.restaurantorderingapp.exceptions.customExceptions.NotFound
 import com.restaurant.restaurantorderingapp.services.foodServices.FoodImageService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +25,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(FoodImageController.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class FoodImageControllerTest extends BaseControllerTest {
 
@@ -75,9 +71,9 @@ public class FoodImageControllerTest extends BaseControllerTest {
     public void testCreateFoodImageSuccess() throws Exception {
         CreateFoodImageDTO createFoodImageDTO = new CreateFoodImageDTO("3333","testing Image");
         String requestBody = objectMapper.writeValueAsString(createFoodImageDTO);
-
+        String endpoint = "/admin" + END_POINT_PATH;
         doNothing().when(foodImageService).createFoodImages(createFoodImageDTO);
-        createRequestSuccessTest(END_POINT_PATH, requestBody);
+        createRequestSuccessTest(endpoint, requestBody);
         verify(foodImageService).createFoodImages(createFoodImageDTO);
     }
 
@@ -86,24 +82,23 @@ public class FoodImageControllerTest extends BaseControllerTest {
     @Order(2)
     public void testGetFoodImageSuccess() throws Exception{
         Long foodImageId = 1L;
-        String requestURI = requestURIBuilder(END_POINT_PATH, foodImageId);
+        String endpoint = "/public" + requestURIBuilder(END_POINT_PATH, foodImageId);
         String responseBody = objectMapper.writeValueAsString(foodImageTestEntity1);
 
         when(foodImageService.getFoodImageById(foodImageId))
                 .thenReturn(foodImageTestEntity1);
-        getRequestSuccessTest(requestURI, responseBody);
+        getRequestSuccessTest(endpoint, responseBody);
         verify(foodImageService).getFoodImageById(foodImageId);
     }
 
     @Test
     @DisplayName("SUCCESSFULLY GET ALL food images.")
-    @WithMockUser(username = "user1", password = "pwd", roles = "ADMIN")
     @Order(3)
     public void testGetFoodImagesSuccess() throws Exception {
         String responseBody = objectMapper.writeValueAsString(foodImageTestEntityList);
-        String route = "/public/foodImages";
+        String endpoint = "/public" + END_POINT_PATH;
         when(foodImageService.getAllFoodImages()).thenReturn(foodImageTestEntityList);
-        getRequestSuccessTest(route, responseBody);
+        getRequestSuccessTest(endpoint, responseBody);
         verify(foodImageService).getAllFoodImages();
     }
 
@@ -112,7 +107,7 @@ public class FoodImageControllerTest extends BaseControllerTest {
     @Order(4)
     public void testUpdateFoodImageSuccess() throws Exception {
         Long foodImageId = 1L;
-        String requestURI = requestURIBuilder(END_POINT_PATH, foodImageId);
+        String requestURI = "/admin" + requestURIBuilder(END_POINT_PATH, foodImageId);
 
         UpdateFoodImageDTO updateFoodImageDTO = new UpdateFoodImageDTO("2222", "test image test");
         String requestBody = objectMapper.writeValueAsString(updateFoodImageDTO);
@@ -131,7 +126,7 @@ public class FoodImageControllerTest extends BaseControllerTest {
     @Order(5)
     public void testDeleteFoodImageSuccess() throws Exception {
         Long foodImageId = 1L;
-        String requestURI = requestURIBuilder(END_POINT_PATH, foodImageId);
+        String requestURI = "/admin" + requestURIBuilder(END_POINT_PATH, foodImageId);
 
         doNothing().when(foodImageService).deleteFoodImage(foodImageId);
         deleteRequestSuccessTest(requestURI, entityName);
@@ -146,7 +141,7 @@ public class FoodImageControllerTest extends BaseControllerTest {
     @Order(6)
     public void testGetFoodImageNotFoundError() throws Exception {
         Long foodImageId = 1255624L;
-        String requestURI = requestURIBuilder(END_POINT_PATH, foodImageId);
+        String requestURI = "/public" + requestURIBuilder(END_POINT_PATH, foodImageId);
 
         /* Our getFoodImageById should throw a NotFoundException with a custom msg, so here we
          * create an instance of the exception and pass the parameters it needs to create the custom msg.*/
@@ -160,7 +155,7 @@ public class FoodImageControllerTest extends BaseControllerTest {
     @Order(7)
     public void testUpdateFoodImageNotFoundError() throws Exception {
         Long foodImageId = 10432L;
-        String requestURI = requestURIBuilder(END_POINT_PATH, foodImageId);
+        String requestURI = "/admin" + requestURIBuilder(END_POINT_PATH, foodImageId);
 
         UpdateFoodImageDTO updateFoodImageDTO = new UpdateFoodImageDTO("3333","UpdateTest");
         String requestBody = objectMapper.writeValueAsString(updateFoodImageDTO);
@@ -177,7 +172,7 @@ public class FoodImageControllerTest extends BaseControllerTest {
     @Order(8)
     public void testDeleteFoodImageNotFoundError() throws Exception {
         Long foodImageId = 102L;
-        String requestURI = requestURIBuilder(END_POINT_PATH, foodImageId);
+        String requestURI = "/admin" + requestURIBuilder(END_POINT_PATH, foodImageId);
 
         doThrow(new NotFoundException(entityName, foodImageId))
                 .when(foodImageService).deleteFoodImage(foodImageId);
@@ -191,8 +186,9 @@ public class FoodImageControllerTest extends BaseControllerTest {
     @Order(9)
     public void testGetFoodImagesEmptyDataTableError() throws Exception {
         String statusCode = String.valueOf(HttpStatus.NOT_FOUND.value());
+        String endpoint = "/public" + END_POINT_PATH;
         when(foodImageService.getAllFoodImages()).thenThrow(new EmptyDataTableException(tableName));
-        emptyDataTableExceptionTest(END_POINT_PATH, statusCode, tableName);
+        emptyDataTableExceptionTest(endpoint, statusCode, tableName);
         verify(foodImageService).getAllFoodImages();
     }
 
@@ -200,13 +196,13 @@ public class FoodImageControllerTest extends BaseControllerTest {
     @DisplayName("Duplicate Food Image Error Handling: CREATE a food image that already exist.")
     @Order(10)
     public void testCreateFoodImageDuplicateError() throws Exception {
-
         String duplicateName = "new image tester";
         CreateFoodImageDTO createFoodImageDTO = new CreateFoodImageDTO("2222",duplicateName);
         String requestBody = objectMapper.writeValueAsString(createFoodImageDTO);
 
+        String endpoint = "/admin" + END_POINT_PATH;
         doThrow(new DuplicateKeyException(duplicateName)).when(foodImageService).createFoodImages(createFoodImageDTO);
-        duplicateKeyExceptionTest(END_POINT_PATH, requestBody, duplicateName);
+        duplicateKeyExceptionTest(endpoint, requestBody, duplicateName);
         verify(foodImageService).createFoodImages(createFoodImageDTO);
     }
 
@@ -218,8 +214,11 @@ public class FoodImageControllerTest extends BaseControllerTest {
         CreateFoodImageDTO createFoodImageDTO = new CreateFoodImageDTO("5555", "");
         String requestBody = objectMapper.writeValueAsString(createFoodImageDTO);
 
-        mockMvc.perform(post(END_POINT_PATH)
+        String endpoint = "/admin" + END_POINT_PATH;
+        mockMvc.perform(post(endpoint)
+                        .header("Authorization", "Bearer " + jwt)
                         .contentType("application/json")
+                        .characterEncoding("utf-8")
                         .content(requestBody))
                 .andDo(print())
                 .andExpect(status().isBadRequest())

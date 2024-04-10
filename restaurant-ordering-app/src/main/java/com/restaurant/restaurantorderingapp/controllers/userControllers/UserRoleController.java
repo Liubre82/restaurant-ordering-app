@@ -19,7 +19,7 @@ public class UserRoleController {
     }
 
 
-    @GetMapping("/public/userRoles")
+    @GetMapping("/admin/userRoles")
     public ResponseEntity<Optional<UserRole>> getUserRole(@PathVariable String userRoleName) {
         Optional<UserRole> userRole = userRoleRepository.findByUserRoleName(userRoleName);
         return ResponseEntity.ok(userRole);

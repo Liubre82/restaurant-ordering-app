@@ -3,7 +3,6 @@
 package com.restaurant.restaurantorderingapp.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.restaurant.restaurantorderingapp.controllers.foodControllers.FoodItemController;
 import com.restaurant.restaurantorderingapp.dto.foodImagesDto.FoodImageDTO;
 import com.restaurant.restaurantorderingapp.dto.foodItemVariationsDto.FoodItemVariationDTO;
 import com.restaurant.restaurantorderingapp.dto.foodItemsDto.CreateFoodItemDTO;
@@ -17,7 +16,6 @@ import com.restaurant.restaurantorderingapp.exceptions.customExceptions.NotFound
 import com.restaurant.restaurantorderingapp.services.foodServices.FoodItemService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -34,7 +32,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@WebMvcTest(FoodItemController.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class FoodItemControllerTest extends BaseControllerTest{
 
@@ -97,9 +94,10 @@ public class FoodItemControllerTest extends BaseControllerTest{
     public void testCreateFoodItemSuccess() throws Exception {
         CreateFoodItemDTO createFoodItemDTO = new CreateFoodItemDTO(menuCategoryTestEntity1.menuCategoryId(), "fried calamari", "tasty batter");
         String requestBody = objectMapper.writeValueAsString(createFoodItemDTO);
+        String endpoint = "/admin" + END_POINT_PATH;
 
         doNothing().when(foodItemService).createFoodItems(createFoodItemDTO);
-        createRequestSuccessTest(END_POINT_PATH, requestBody);
+        createRequestSuccessTest(endpoint, requestBody);
         verify(foodItemService).createFoodItems(createFoodItemDTO);
     }
 
@@ -108,7 +106,7 @@ public class FoodItemControllerTest extends BaseControllerTest{
     @Order(2)
     public void testGetFoodItemSuccess() throws Exception{
         String foodItemId = "1L";
-        String requestURI = requestURIBuilder(END_POINT_PATH, foodItemId);
+        String requestURI = "/public" + requestURIBuilder(END_POINT_PATH, foodItemId);
         String responseBody = objectMapper.writeValueAsString(foodItemTestEntity1);
 
         when(foodItemService.getFoodItemById(foodItemId))
@@ -122,9 +120,9 @@ public class FoodItemControllerTest extends BaseControllerTest{
     @Order(3)
     public void testGetFoodItemsSuccess() throws Exception {
         String responseBody = objectMapper.writeValueAsString(foodItemTestEntityList);
-
+        String endpoint = "/public" + END_POINT_PATH;
         when(foodItemService.getAllFoodItems()).thenReturn(foodItemTestEntityList);
-        getRequestSuccessTest(END_POINT_PATH, responseBody);
+        getRequestSuccessTest(endpoint, responseBody);
         verify(foodItemService).getAllFoodItems();
     }
 
@@ -133,7 +131,7 @@ public class FoodItemControllerTest extends BaseControllerTest{
     @Order(4)
     public void testSearchFoodItemsSuccess() throws Exception {
         String searchInput = "soup";
-        String requestURI = END_POINT_PATH + "/search?searchInput=" + searchInput;
+        String requestURI = "/public" + END_POINT_PATH + "/search?searchInput=" + searchInput;
         List<FoodItemDTO> searchList = new ArrayList<>();
         searchList.add(foodItemTestEntity2);
         String responseBody = objectMapper.writeValueAsString(searchList);
@@ -148,7 +146,7 @@ public class FoodItemControllerTest extends BaseControllerTest{
     @Order(5)
     public void testUpdateFoodItemSuccess() throws Exception {
         String foodItemId = "1L";
-        String requestURI = requestURIBuilder(END_POINT_PATH, foodItemId);
+        String requestURI = "/admin" + requestURIBuilder(END_POINT_PATH, foodItemId);
 
         UpdateFoodItemDTO updateFoodItemDTO = new UpdateFoodItemDTO(1L, "update","UpdateTest");
         String requestBody = objectMapper.writeValueAsString(updateFoodItemDTO);
@@ -167,7 +165,7 @@ public class FoodItemControllerTest extends BaseControllerTest{
     @Order(6)
     public void testDeleteFoodItemSuccess() throws Exception {
         String foodItemId = "1L";
-        String requestURI = requestURIBuilder(END_POINT_PATH, foodItemId);
+        String requestURI = "/admin" + requestURIBuilder(END_POINT_PATH, foodItemId);
 
         doNothing().when(foodItemService).deleteFoodItem(foodItemId);
         deleteRequestSuccessTest(requestURI, entityName);
@@ -179,7 +177,7 @@ public class FoodItemControllerTest extends BaseControllerTest{
     @Order(7)
     public void testGetAllFoodItemVariationsByFoodItemIdSuccess() throws Exception {
         String foodItemId = "1L";
-        String requestURI = requestURIBuilder(END_POINT_PATH, foodItemId) + "/foodItemVariations";
+        String requestURI = "/public" + requestURIBuilder(END_POINT_PATH, foodItemId) + "/foodItemVariations";
         String responseBody = objectMapper.writeValueAsString(foodItemVariationTestEntityList);
 
         when(foodItemService.getAllFoodItemVariations(foodItemId)).thenReturn(foodItemVariationTestEntityList);
@@ -192,7 +190,7 @@ public class FoodItemControllerTest extends BaseControllerTest{
     @Order(8)
     public void testGetAllFoodImagesByFoodItemIdSuccess() throws Exception {
         String foodItemId = "1L";
-        String requestURI = requestURIBuilder(END_POINT_PATH, foodItemId) + "/foodImages";
+        String requestURI = "/public" + requestURIBuilder(END_POINT_PATH, foodItemId) + "/foodImages";
         String responseBody = objectMapper.writeValueAsString(foodImageTestEntityList);
 
         when(foodItemService.getAllFoodImages(foodItemId)).thenReturn(foodImageTestEntityList);
@@ -208,7 +206,7 @@ public class FoodItemControllerTest extends BaseControllerTest{
     @Order(9)
     public void testGetFoodItemNotFoundError() throws Exception {
         String foodItemId = "1255624L";
-        String requestURI = requestURIBuilder(END_POINT_PATH, foodItemId);
+        String requestURI = "/public" + requestURIBuilder(END_POINT_PATH, foodItemId);
 
         /* Our getFoodItemById should throw a NotFoundException with a custom msg, so here we
          * create an instance of the exception and pass the parameters it needs to create the custom msg.*/
@@ -222,7 +220,7 @@ public class FoodItemControllerTest extends BaseControllerTest{
     @Order(10)
     public void testUpdateFoodItemNotFoundError() throws Exception {
         String foodItemId = "10432L";
-        String requestURI = requestURIBuilder(END_POINT_PATH, foodItemId);
+        String requestURI = "/admin" + requestURIBuilder(END_POINT_PATH, foodItemId);
 
         UpdateFoodItemDTO updateFoodItemDTO = new UpdateFoodItemDTO(1L, "notFound", "test");
         String requestBody = objectMapper.writeValueAsString(updateFoodItemDTO);
@@ -239,7 +237,7 @@ public class FoodItemControllerTest extends BaseControllerTest{
     @Order(11)
     public void testDeleteFoodItemNotFoundError() throws Exception {
         String foodItemId = "102L";
-        String requestURI = requestURIBuilder(END_POINT_PATH, foodItemId);
+        String requestURI = "/admin" + requestURIBuilder(END_POINT_PATH, foodItemId);
 
         doThrow(new NotFoundException(entityName, foodItemId))
                 .when(foodItemService).deleteFoodItem(foodItemId);
@@ -252,9 +250,10 @@ public class FoodItemControllerTest extends BaseControllerTest{
     @DisplayName("Empty Data-table Error Handler: GET ALL food items when there are no food items.")
     @Order(12)
     public void testGetFoodItemsEmptyDataTableError() throws Exception {
+        String endpoint = "/public" + END_POINT_PATH;
         String statusCode = String.valueOf(HttpStatus.NOT_FOUND.value());
         when(foodItemService.getAllFoodItems()).thenThrow(new EmptyDataTableException(tableName));
-        emptyDataTableExceptionTest(END_POINT_PATH, statusCode, tableName);
+        emptyDataTableExceptionTest(endpoint, statusCode, tableName);
         verify(foodItemService).getAllFoodItems();
     }
 
@@ -262,13 +261,13 @@ public class FoodItemControllerTest extends BaseControllerTest{
     @DisplayName("Duplicate Food Size Error Handling: CREATE a food item that already exist.")
     @Order(13)
     public void testCreateFoodItemDuplicateError() throws Exception {
-
+        String endpoint = "/admin" + END_POINT_PATH;
         String duplicateName = "Steak";
         CreateFoodItemDTO createFoodItemDTO = new CreateFoodItemDTO(1L, duplicateName, "steak description");
         String requestBody = objectMapper.writeValueAsString(createFoodItemDTO);
 
         doThrow(new DuplicateKeyException(duplicateName)).when(foodItemService).createFoodItems(createFoodItemDTO);
-        duplicateKeyExceptionTest(END_POINT_PATH, requestBody, duplicateName);
+        duplicateKeyExceptionTest(endpoint, requestBody, duplicateName);
         verify(foodItemService).createFoodItems(createFoodItemDTO);
     }
 
@@ -279,9 +278,10 @@ public class FoodItemControllerTest extends BaseControllerTest{
         String statusCode = String.valueOf(HttpStatus.BAD_REQUEST.value());
         CreateFoodItemDTO createFoodItemDTO = new CreateFoodItemDTO(1L,"", "test");
         String requestBody = objectMapper.writeValueAsString(createFoodItemDTO);
-
-        mockMvc.perform(post(END_POINT_PATH)
+        String endpoint = "/admin" + END_POINT_PATH;
+        mockMvc.perform(post(endpoint)
                         .contentType("application/json")
+                        .characterEncoding("utf-8")
                         .content(requestBody))
                 .andDo(print())
                 .andExpect(status().isBadRequest())

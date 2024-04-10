@@ -33,6 +33,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<UserAddress> userAddresses;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private UserRestaurantReview userRestaurantReview;
+
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(getUserRole().getUserRoleName()));
     }
@@ -83,6 +86,14 @@ public class User implements UserDetails {
 
     public void setUserAddresses(List<UserAddress> userAddresses) {
         this.userAddresses = userAddresses;
+    }
+
+    public UserRestaurantReview getUserRestaurantReview() {
+        return userRestaurantReview;
+    }
+
+    public void setUserRestaurantReview(UserRestaurantReview userRestaurantReview) {
+        this.userRestaurantReview = userRestaurantReview;
     }
 
     @Override
