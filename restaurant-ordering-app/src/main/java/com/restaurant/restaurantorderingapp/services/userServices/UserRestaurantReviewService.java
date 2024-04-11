@@ -6,10 +6,12 @@ import com.restaurant.restaurantorderingapp.dto.userRestaurantReviewsDto.UserRes
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.DuplicateKeyException;
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.EmptyDataTableException;
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.NotFoundException;
+import com.restaurant.restaurantorderingapp.exceptions.customExceptions.UserNotAuthorizedException;
 import com.restaurant.restaurantorderingapp.models.user.User;
 import com.restaurant.restaurantorderingapp.models.user.UserRestaurantReview;
 import com.restaurant.restaurantorderingapp.repositories.userRepositories.UserRepository;
 import com.restaurant.restaurantorderingapp.repositories.userRepositories.UserRestaurantReviewRepository;
+import com.restaurant.restaurantorderingapp.utils.auth.UserIdCheck;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -124,8 +126,9 @@ public class UserRestaurantReviewService {
      */
     public UserRestaurantReviewDTO updateUserRestaurantReview(Long userRestaurantReviewId, UpdateUserRestaurantReviewDTO updateUserRestaurantReviewDTO) {
         UserRestaurantReview userRestaurantReview = findUserRestaurantReviewById(userRestaurantReviewId);
-        User user = findUserById(updateUserRestaurantReviewDTO.userId());
-        userRestaurantReview.setUser(user);
+        boolean authorized = UserIdCheck.checkUserId(userRestaurantReview.getUser().getUserId(), updateUserRestaurantReviewDTO.userId());
+        if(!authorized) throw new UserNotAuthorizedException(updateUserRestaurantReviewDTO.userId(), entityName, userRestaurantReviewId);
+
         userRestaurantReview.setUserRestaurantReviewTitle(updateUserRestaurantReviewDTO.userRestaurantReviewTitle());
         userRestaurantReview.setUserRestaurantRating(updateUserRestaurantReviewDTO.userRestaurantRating());
         userRestaurantReview.setUserRestaurantReviewDescription(updateUserRestaurantReviewDTO.userRestaurantReviewDescription());

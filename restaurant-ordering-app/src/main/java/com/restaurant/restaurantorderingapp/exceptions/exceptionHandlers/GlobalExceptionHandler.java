@@ -3,6 +3,7 @@ package com.restaurant.restaurantorderingapp.exceptions.exceptionHandlers;
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.DuplicateKeyException;
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.EmptyDataTableException;
 import com.restaurant.restaurantorderingapp.exceptions.customExceptions.NotFoundException;
+import com.restaurant.restaurantorderingapp.exceptions.customExceptions.UserNotAuthorizedException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,18 @@ import java.util.Map;
 @ControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(UserNotAuthorizedException.class)
+    public ResponseEntity<Map<String, String>> handleUserNotAuthorizedException(UserNotAuthorizedException e) {
+        HttpStatus statusCode = HttpStatus.UNAUTHORIZED;
+        Map<String, String> errorResponse = new LinkedHashMap<>();
+        errorResponse.put("status code", String.valueOf(statusCode.value()));
+        errorResponse.put("message", e.getMessage());
+        log.error("UserNotAuthorizedException", errorResponse);
+        return ResponseEntity
+                .status(statusCode)
+                .body(errorResponse);
+    }
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<Map<String, String>> handleNotFoundException(NotFoundException e) {

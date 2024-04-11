@@ -1,8 +1,14 @@
+USE restaurant;
+
+SHOW tables;
+
 INSERT INTO menu_categories VALUES (1, 'Appetizers'), (2, 'Steaks'), (3, 'Desserts'), (4, 'Beverages'), (5, 'Noodles'),
 (6, 'Soups');
 
 
+
 INSERT INTO food_sizes VALUES (1, 'Small'), (2, 'Medium'), (3, 'Large'), (4, '4oz'), (5, '8oz'), (6, '12oz'), (7, '16oz'), (8, 'regular');
+
 
 
 INSERT INTO food_items VALUES
@@ -156,13 +162,32 @@ INSERT INTO food_images VALUES
 (52, 'dcbcf0ac-069d-4aa5-be94-ffc8be16b6cc', 'Spicy Beef Stew Phó Noodle Soup IMAGE');
 
 
-
-
-
 -- Users Related Schema.
 INSERT INTO user_roles VALUES
-('3d1701f1-4d66-4064-be1e-2d0b9bb4161a', 'customer'),
-('c8d352e8-6cbd-4652-9a09-0fcf45e0a817', 'employee');
+('3d1701f1-4d66-4064-be1e-2d0b9bb4161a', 'CUSTOMER'),
+('c8d352e8-6cbd-4652-9a09-0fcf45e0a817', 'ADMIN');
 
 
+INSERT INTO users VALUES
+('a7103c8b-714e-4bd0-a5de-6bf7b5dadc46', '3d1701f1-4d66-4064-be1e-2d0b9bb4161a', 'jiajin', 'jiajin@gmail.com', '!asd123'),
+('afc82b3c-ba1e-482b-baf5-e540cba9d5ab', '3d1701f1-4d66-4064-be1e-2d0b9bb4161a', 'Johnny', 'johnny@gmail.com', '@zxc345'),
+('6deb3f14-348f-4d29-a9b5-e2f1198ab03e', '3d1701f1-4d66-4064-be1e-2d0b9bb4161a', 'Amy', 'amy@gmail.com', '!asd123'),
+('5eb61db0-a929-444a-ab89-f5e07d4eba55', 'c8d352e8-6cbd-4652-9a09-0fcf45e0a817', 'Employee', 'employee@aol.com', '!dsa321');
+SELECT * FROM users;
+
+
+INSERT INTO user_addresses VALUES
+(1, 'a7103c8b-714e-4bd0-a5de-6bf7b5dadc46', '111 black road', 'Las Vegas', 'Nevada', '01231'),
+(2, 'a7103c8b-714e-4bd0-a5de-6bf7b5dadc46', '1205 garfield drive', 'Los Angeles', 'California', '09563'),
+(3, 'afc82b3c-ba1e-482b-baf5-e540cba9d5ab', '201 Mantua grove', 'West Deptford', 'New Jersey', '65239'),
+(4, 'afc82b3c-ba1e-482b-baf5-e540cba9d5ab', '1 lincoln memorial street', 'Philadephia', 'Pennsylvannia', '05236'),
+(5, '6deb3f14-348f-4d29-a9b5-e2f1198ab03e', '999 roosevelt drive', 'Cleveland', 'Ohio', '87452'),
+(6, '6deb3f14-348f-4d29-a9b5-e2f1198ab03e', '321 Spring dale road', 'Maiami', 'Florida', '26301');
+SELECT * FROM user_addresses;
+
+INSERT INTO user_restaurant_reviews (user_id, user_restaurant_review_title, user_restaurant_rating, user_restaurant_review_description) VALUES
+('a7103c8b-714e-4bd0-a5de-6bf7b5dadc46', 'Tastes like shit', 1.5, 'Dont ever go to this trash ass place, food taste like doodoo'),
+('afc82b3c-ba1e-482b-baf5-e540cba9d5ab', 'Amazing tasting restaurant', 5, 'Love the food here, would come again'),
+('6deb3f14-348f-4d29-a9b5-e2f1198ab03e', 'solid food, could be better', 3.5, 'I loved the soup, but the dessert was kinda stale'),
+('5eb61db0-a929-444a-ab89-f5e07d4eba55', 'good food, good environment', 4, 'Good food, could be better');
 

@@ -22,4 +22,5 @@ public class AuthReqRes {
     private String userRoleName;
     private String password;
     private User user;
+    private String userId;
 }

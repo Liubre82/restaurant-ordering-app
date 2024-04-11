@@ -92,7 +92,7 @@ public class AuthService {
             System.out.println("USER IS: "+ user);
             var jwt = jwtUtils.generateAccessToken(user);
             var refreshToken = jwtUtils.generateRefreshToken(new HashMap<>(), user);
-            //response.setUser(user);
+            response.setUserId(user.getUserId());
             response.setStatusCode(200);
             response.setAccessToken(jwt);
             response.setRefreshToken(refreshToken);
