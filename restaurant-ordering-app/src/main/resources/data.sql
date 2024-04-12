@@ -1,6 +1,6 @@
-USE restaurant;
-
-SHOW tables;
+--USE restaurant;
+--
+--SHOW tables;
 
 INSERT INTO menu_categories VALUES (1, 'Appetizers'), (2, 'Steaks'), (3, 'Desserts'), (4, 'Beverages'), (5, 'Noodles'),
 (6, 'Soups');
@@ -173,7 +173,6 @@ INSERT INTO users VALUES
 ('afc82b3c-ba1e-482b-baf5-e540cba9d5ab', '3d1701f1-4d66-4064-be1e-2d0b9bb4161a', 'Johnny', 'johnny@gmail.com', '@zxc345'),
 ('6deb3f14-348f-4d29-a9b5-e2f1198ab03e', '3d1701f1-4d66-4064-be1e-2d0b9bb4161a', 'Amy', 'amy@gmail.com', '!asd123'),
 ('5eb61db0-a929-444a-ab89-f5e07d4eba55', 'c8d352e8-6cbd-4652-9a09-0fcf45e0a817', 'Employee', 'employee@aol.com', '!dsa321');
-SELECT * FROM users;
 
 
 INSERT INTO user_addresses VALUES
@@ -183,7 +182,7 @@ INSERT INTO user_addresses VALUES
 (4, 'afc82b3c-ba1e-482b-baf5-e540cba9d5ab', '1 lincoln memorial street', 'Philadephia', 'Pennsylvannia', '05236'),
 (5, '6deb3f14-348f-4d29-a9b5-e2f1198ab03e', '999 roosevelt drive', 'Cleveland', 'Ohio', '87452'),
 (6, '6deb3f14-348f-4d29-a9b5-e2f1198ab03e', '321 Spring dale road', 'Maiami', 'Florida', '26301');
-SELECT * FROM user_addresses;
+
 
 INSERT INTO user_restaurant_reviews (user_id, user_restaurant_review_title, user_restaurant_rating, user_restaurant_review_description) VALUES
 ('a7103c8b-714e-4bd0-a5de-6bf7b5dadc46', 'Tastes like shit', 1.5, 'Dont ever go to this trash ass place, food taste like doodoo'),

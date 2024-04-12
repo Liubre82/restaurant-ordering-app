@@ -66,7 +66,7 @@ setting up your project locally. To get a local copy up and running follow these
 ### Setup
 
 * Create and set up your own MySql server, I used version 8.0.36 on my local machine. schema.sql
-and data.sql are is in the ~/restaurant-ordering-app/resource package for datatable creation and data population.
+and data.sql are is in the ~/restaurant-ordering-app/src/main/resources package for datatable creation and data population.
 
    ```sh
    https://dev.mysql.com/downloads/installer/

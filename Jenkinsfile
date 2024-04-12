@@ -13,6 +13,13 @@ pipeline {
         DOCKER_PASS = 'docker-hub'
         IMAGE_NAME = "${DOCKER_USER}" + "/" + "${APP_NAME}"
         IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"
+
+        // Define environment variables for H2 database configuration
+        DB_URL = 'jdbc:h2:mem:testdb'
+        DB_DRIVER = 'org.h2.Driver'
+        DB_USERNAME = 'sa'
+        DB_PASSWORD = 'password'
+        DB_DIALECT = 'org.hibernate.dialect.H2Dialect'
     }
 
     stages {
@@ -31,12 +38,13 @@ pipeline {
         stage("Build Application") {
             steps {
                 sh "mvn clean package -f restaurant-ordering-app/pom.xml"
+                sh 'mvn clean install -DskipTests'
             }
         }
 
         stage("Test Application") {
             steps {
-                sh "mvn test -f restaurant-ordering-app/pom.xml"
+                sh "mvn test -f restaurant-ordering-app/pom.xml -Dspring.datasource.url=${DB_URL} -Dspring.datasource.driver-class-name=${DB_DRIVER} -Dspring.datasource.username=${DB_USERNAME} -Dspring.datasource.password=${DB_PASSWORD} -Dspring.jpa.database-platform=${DB_DIALECT}"
             }
         }
 

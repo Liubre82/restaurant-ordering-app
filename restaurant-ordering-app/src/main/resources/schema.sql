@@ -1,7 +1,7 @@
-DROP DATABASE restaurant;
-CREATE DATABASE IF NOT EXISTS restaurant;
-
-USE restaurant;
+--DROP DATABASE restaurant;
+--CREATE DATABASE IF NOT EXISTS restaurant;
+--
+--USE restaurant;
 
 CREATE TABLE IF NOT EXISTS menu_categories (
 	menu_category_id INT AUTO_INCREMENT,
