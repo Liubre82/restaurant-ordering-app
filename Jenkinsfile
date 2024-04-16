@@ -43,7 +43,7 @@ pipeline {
 
         stage("Test Application") {
             steps {
-                sh "mvn test -f restaurant-ordering-app/pom.xml -Dspring.datasource.url=${DB_URL} -Dspring.datasource.driver-class-name=${DB_DRIVER} -Dspring.datasource.username=${DB_USERNAME} -Dspring.datasource.password=${DB_PASSWORD} -Dspring.jpa.database-platform=${DB_DIALECT}"
+                sh "mvn test -f restaurant-ordering-app/pom.xml"
             }
         }
 
