@@ -37,7 +37,7 @@ pipeline {
 
         stage("Build Application") {
             steps {
-                sh "mvn clean package -f restaurant-ordering-app/pom.xml -DskipTests"
+                sh "mvn clean package -f restaurant-ordering-app/pom.xml"
             }
         }
 
