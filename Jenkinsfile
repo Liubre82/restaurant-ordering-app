@@ -35,17 +35,17 @@ pipeline {
             }
         }
 
-        stage("Build Application") {
+        stage("Build and Test Application") {
             steps {
                 sh "mvn clean package -f restaurant-ordering-app/pom.xml"
             }
         }
 
-        stage("Test Application") {
-            steps {
-                sh "mvn test -f restaurant-ordering-app/pom.xml"
-            }
-        }
+//         stage("Test Application") {
+//             steps {
+//                 sh "mvn test -f restaurant-ordering-app/pom.xml"
+//             }
+//         }
 
         stage("Build & Push Docker Image") {
             steps {
