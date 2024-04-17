@@ -41,11 +41,23 @@ pipeline {
             }
         }
 
-//         stage("Test Application") {
-//             steps {
-//                 sh "mvn test -f restaurant-ordering-app/pom.xml"
-//             }
-//         }
+         stage("SonarQube Analysis") {
+             steps {
+                    script {
+                        withSonarQubeEnv(credentialsId: 'jenkins-sonarqube-token') {
+                            sh "mvn sonar:sonar"
+                        }
+                    }
+             }
+         }
+
+         stage("Quality Gate") {
+            steps {
+                script {
+                    waitForQualityGate abortPipeline: false, credentialsId: 'jenkins-sonarqube-token'
+                }
+            }
+         }
 
         stage("Build & Push Docker Image") {
             steps {
