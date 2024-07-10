@@ -11,6 +11,10 @@ public record CreateUserAddressDTO(
 
         @NotNull
         @NotBlank
+        String personName,
+
+        @NotNull
+        @NotBlank
         String addressName,
 
         @NotNull

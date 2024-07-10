@@ -31,5 +31,5 @@ public record UserRestaurantReviewDTO(
 
         @NotNull
         @NotBlank
-        String createdAt
+        String reviewCreatedAt
 ) {}

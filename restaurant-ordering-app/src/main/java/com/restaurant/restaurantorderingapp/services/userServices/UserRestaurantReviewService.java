@@ -126,7 +126,7 @@ public class UserRestaurantReviewService {
      */
     public UserRestaurantReviewDTO updateUserRestaurantReview(Long userRestaurantReviewId, UpdateUserRestaurantReviewDTO updateUserRestaurantReviewDTO) {
         UserRestaurantReview userRestaurantReview = findUserRestaurantReviewById(userRestaurantReviewId);
-        boolean authorized = UserIdCheck.checkUserId(userRestaurantReview.getUser().getUserId(), updateUserRestaurantReviewDTO.userId());
+        boolean authorized = UserIdCheck.checkStringId(userRestaurantReview.getUser().getUserId(), updateUserRestaurantReviewDTO.userId());
         if(!authorized) throw new UserNotAuthorizedException(updateUserRestaurantReviewDTO.userId(), entityName, userRestaurantReviewId);
 
         userRestaurantReview.setUserRestaurantReviewTitle(updateUserRestaurantReviewDTO.userRestaurantReviewTitle());

@@ -53,6 +53,7 @@ public class UserAddressService {
      * @throws NotFoundException if the userAddressId is not found/doesn't exist in our db/context.
      */
     public UserAddress findUserAddressById(Long userAddressId) {
+        System.out.println("GetADDY" + userAddressId);
         return userAddressRepository.findById(userAddressId)
                 .orElseThrow(() -> new NotFoundException(entityName, userAddressId));
     }
@@ -65,6 +66,8 @@ public class UserAddressService {
      * @throws NotFoundException if the userAddressId is not found/doesn't exist in our db/context.
      */
     public UserAddressDTO getUserAddressById(Long userAddressId) {
+
+
         UserAddress userAddress = findUserAddressById(userAddressId);
         UserAddressDTO UserAddressDTO = fromEntityToDTO(userAddress);
         return  UserAddressDTO;
@@ -121,6 +124,7 @@ public class UserAddressService {
         UserAddress userAddress = findUserAddressById(userAddressId);
         User user = findUserById(updateUserAddressDTO.userId());
         userAddress.setUser(user);
+        userAddress.setPersonName(updateUserAddressDTO.personName());
         userAddress.setAddressName(updateUserAddressDTO.addressName());
         userAddress.setCity(updateUserAddressDTO.city());
         userAddress.setState(updateUserAddressDTO.state());

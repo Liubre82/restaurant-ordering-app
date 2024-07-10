@@ -16,6 +16,9 @@ public class UserAddress {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(name = "person_name")
+    private String personName;
+
     @Column(name = "address_name")
     private String addressName;
 
@@ -38,6 +41,14 @@ public class UserAddress {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getPersonName() {
+        return personName;
+    }
+
+    public void setPersonName(String personName) {
+        this.personName = personName;
     }
 
     public String getAddressName() {

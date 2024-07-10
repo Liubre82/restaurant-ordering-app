@@ -31,13 +31,6 @@ public class FoodImageController {
         return ResponseEntity.ok(foodImages);
     }
 
-    // curl -i -s http://localhost:8080/api/foodImages | sed -e 's/{/\n&/g'
-    @GetMapping("/admin/foodImages")
-    public ResponseEntity<List<FoodImageDTO>> getFoodImagess() {
-        List<FoodImageDTO> foodImages = foodImageService.getAllFoodImages();
-        return ResponseEntity.ok(foodImages);
-    }
-
     @GetMapping("/public/foodImages/{foodImageId}")
     public ResponseEntity<FoodImageDTO> getFoodImage(@PathVariable Long foodImageId) {
         FoodImageDTO foodImageDTO = foodImageService.getFoodImageById(foodImageId);

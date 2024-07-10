@@ -1,9 +1,11 @@
-package com.restaurant.restaurantorderingapp.dto.userAddressesDto;
+package com.restaurant.restaurantorderingapp.dto.orderSystemDto.userOrdersDto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record UpdateUserAddressDTO(
+import java.math.BigDecimal;
+
+public record CreateUserOrderDTO(
 
         @NotNull
         @NotBlank
@@ -11,21 +13,19 @@ public record UpdateUserAddressDTO(
 
         @NotNull
         @NotBlank
-        String personName,
+        Long userAddressId,
 
         @NotNull
         @NotBlank
-        String addressName,
+        BigDecimal subtotal,
 
         @NotNull
         @NotBlank
-        String city,
+        BigDecimal totalSalesTax,
 
         @NotNull
         @NotBlank
-        String state,
+        BigDecimal totalOrderCost,
 
-        @NotNull
-        @NotBlank
-        String zipCode
+        String orderNotes
 ) {}

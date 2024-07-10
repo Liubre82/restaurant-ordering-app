@@ -12,6 +12,7 @@ public class UserAddressMapper {
         return new UserAddressDTO(
                 userAddress.getUserAddressId(),
                 userAddress.getUser().getUserId(),
+                userAddress.getPersonName(),
                 userAddress.getAddressName(),
                 userAddress.getCity(),
                 userAddress.getState(),
@@ -22,6 +23,7 @@ public class UserAddressMapper {
     public static UserAddress fromDTOToEntity(CreateUserAddressDTO createUserAddressDTO, User user) {
         UserAddress userAddress = new UserAddress();
         userAddress.setUser(user);
+        userAddress.setPersonName(createUserAddressDTO.personName());
         userAddress.setAddressName(createUserAddressDTO.addressName());
         userAddress.setCity(createUserAddressDTO.city());
         userAddress.setState(createUserAddressDTO.state());

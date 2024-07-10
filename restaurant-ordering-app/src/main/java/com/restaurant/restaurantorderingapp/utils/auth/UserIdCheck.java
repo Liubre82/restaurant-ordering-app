@@ -4,7 +4,11 @@ public class UserIdCheck {
 
     private UserIdCheck(){}
 
-    public static boolean checkUserId(String userId, String userIdCheck) {
-        return userId.equals(userIdCheck);
+    public static boolean checkStringId(String id, String idCheck) {
+        return id.equals(idCheck);
+    }
+
+    public static boolean checkLongId(Long id, Long idCheck) {
+        return id == idCheck;
     }
 }

@@ -15,6 +15,10 @@ public record UserAddressDTO (
 
         @NotNull
         @NotBlank
+        String personName,
+
+        @NotNull
+        @NotBlank
         String addressName,
 
         @NotNull

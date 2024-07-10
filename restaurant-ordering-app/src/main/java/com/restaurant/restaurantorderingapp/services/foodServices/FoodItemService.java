@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import static com.restaurant.restaurantorderingapp.utils.mappers.FoodItemMapper.fromDTOToEntity;
@@ -69,7 +68,7 @@ public class FoodItemService {
         if(foodItems.isEmpty()) throw new EmptyDataTableException(entityName);
         return foodItems.stream()
                 .map(entity -> fromEntityToDTO(entity, entity.getMenuCategory())) //
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public List<FoodItemVariationDTO> getAllFoodItemVariations(String foodItemId) {
@@ -77,7 +76,7 @@ public class FoodItemService {
         List<FoodItemVariation> foodItemVariations = foodItem.getFoodItemVariations();
         return foodItemVariations.stream()
                 .map(FoodItemVariationMapper::fromEntityToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public List<FoodImageDTO> getAllFoodImages(String foodItemId) {
@@ -85,7 +84,7 @@ public class FoodItemService {
         List<FoodImage> foodImages = foodItem.getFoodImages();
         return foodImages.stream()
                 .map(FoodImageMapper::fromEntityToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public void createFoodItems(CreateFoodItemDTO createFoodItemDTO) {
@@ -132,7 +131,7 @@ public class FoodItemService {
         }
         List<FoodItemDTO> FoodItems = StreamSupport.stream(FoodItemsIterable.spliterator(), false)
                 .map(entity -> fromEntityToDTO(entity, entity.getMenuCategory()))
-                .collect(Collectors.toList());
+                .toList();
         return FoodItems;
     }
 

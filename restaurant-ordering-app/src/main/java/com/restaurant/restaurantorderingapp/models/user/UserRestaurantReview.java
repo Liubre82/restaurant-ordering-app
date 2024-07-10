@@ -28,8 +28,8 @@ public class UserRestaurantReview {
     private String userRestaurantReviewDescription;
 
     @UpdateTimestamp
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    @Column(name = "review_created_at")
+    private LocalDateTime reviewCreatedAt;
 
     public Long getUserRestaurantReviewId() {
         return userRestaurantReviewId;
@@ -67,11 +67,11 @@ public class UserRestaurantReview {
         this.userRestaurantReviewDescription = userRestaurantReviewDescription;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public LocalDateTime getReviewCreatedAt() {
+        return reviewCreatedAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    public void setReviewCreatedAt(LocalDateTime reviewCreatedAt) {
+        this.reviewCreatedAt = reviewCreatedAt;
     }
 }

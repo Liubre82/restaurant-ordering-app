@@ -27,7 +27,7 @@ public class UserAddressController {
     // curl -i -s http://localhost:8080/api/userAddresses | sed -e 's/{/\n&/g'
     //Method should not be accessible to any users,
     @GetMapping("/admin/userAddresses")
-    public ResponseEntity<List<UserAddressDTO>> getUserAddresses() {
+    public ResponseEntity<List<UserAddressDTO>> getAllUserAddresses() {
         List<UserAddressDTO> userAddresses = userAddressService.getAllUserAddresses();
         return ResponseEntity.ok(userAddresses);
     }

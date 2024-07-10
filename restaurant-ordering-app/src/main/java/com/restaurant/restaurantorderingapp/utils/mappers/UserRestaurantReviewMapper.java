@@ -13,7 +13,7 @@ public class UserRestaurantReviewMapper {
 
     public static UserRestaurantReviewDTO fromEntityToDTO(UserRestaurantReview userRestaurantReview) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm a");
-        String formattedDateTime = userRestaurantReview.getCreatedAt().format(formatter);
+        String formattedDateTime = userRestaurantReview.getReviewCreatedAt().format(formatter);
         return new UserRestaurantReviewDTO(
                 userRestaurantReview.getUserRestaurantReviewId(),
                 userRestaurantReview.getUser().getUserId(),
