@@ -1,7 +1,6 @@
 package com.restaurant.restaurantorderingapp.services.orderSystemServices;
 
 import com.restaurant.restaurantorderingapp.dto.orderSystemDto.CreateUserFoodOrderDTO;
-import com.restaurant.restaurantorderingapp.dto.orderSystemDto.UserFoodOrderDTO;
 import com.restaurant.restaurantorderingapp.models.food.FoodItemVariation;
 import com.restaurant.restaurantorderingapp.models.user.User;
 import com.restaurant.restaurantorderingapp.models.user.UserAddress;
@@ -12,7 +11,6 @@ import com.restaurant.restaurantorderingapp.repositories.userRepositories.UserOr
 import com.restaurant.restaurantorderingapp.services.foodServices.FoodItemVariationService;
 import com.restaurant.restaurantorderingapp.services.userServices.UserAddressService;
 import com.restaurant.restaurantorderingapp.services.userServices.UserService;
-import com.restaurant.restaurantorderingapp.utils.mappers.FoodItemVariationMapper;
 import com.restaurant.restaurantorderingapp.utils.mappers.OrderSystemMapper;
 import com.restaurant.restaurantorderingapp.utils.mappers.UserFoodItemMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +20,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Service
@@ -71,15 +68,15 @@ public class OrderSystemService {
 //        );
 //    }
 
-    public UserFoodOrderDTO getAllUserFoodOrder(String userId) {
-        Iterable<UserOrder> userOrder = userOrderRepository.findAllUserOrdersByUserId(userId);
-
-        while(userOrder.iterator().hasNext()) {
-
-        }
-
-
-    }
+//    public UserFoodOrderDTO getAllUserFoodOrder(String userId) {
+//        Iterable<UserOrder> userOrder = userOrderRepository.findAllUserOrdersByUserId(userId);
+//
+//        while(userOrder.iterator().hasNext()) {
+//
+//        }
+//
+//
+//    }
 
 
     /**
