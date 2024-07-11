@@ -1,6 +1,11 @@
 package com.restaurant.restaurantorderingapp.services.orderSystemServices;
 
 import com.restaurant.restaurantorderingapp.dto.orderSystemDto.CreateUserFoodOrderDTO;
+import com.restaurant.restaurantorderingapp.dto.orderSystemDto.FoodItemVariationDTO;
+import com.restaurant.restaurantorderingapp.dto.orderSystemDto.UserFoodItemDTO;
+import com.restaurant.restaurantorderingapp.dto.orderSystemDto.UserFoodOrderDTO;
+import com.restaurant.restaurantorderingapp.dto.userAddressesDto.UserAddressDTO;
+import com.restaurant.restaurantorderingapp.exceptions.customExceptions.NotFoundException;
 import com.restaurant.restaurantorderingapp.models.food.FoodItemVariation;
 import com.restaurant.restaurantorderingapp.models.user.User;
 import com.restaurant.restaurantorderingapp.models.user.UserAddress;
@@ -12,6 +17,7 @@ import com.restaurant.restaurantorderingapp.services.foodServices.FoodItemVariat
 import com.restaurant.restaurantorderingapp.services.userServices.UserAddressService;
 import com.restaurant.restaurantorderingapp.services.userServices.UserService;
 import com.restaurant.restaurantorderingapp.utils.mappers.OrderSystemMapper;
+import com.restaurant.restaurantorderingapp.utils.mappers.UserAddressMapper;
 import com.restaurant.restaurantorderingapp.utils.mappers.UserFoodItemMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +27,8 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class OrderSystemService {
@@ -51,6 +59,11 @@ public class OrderSystemService {
         this.userAddressService = userAddressService;
     }
 
+    public UserOrder findUserOrderById(String userOrderId) {
+        return userOrderRepository.findById(userOrderId)
+                .orElseThrow(() -> new NotFoundException("User Order", userOrderId));
+    }
+
 //    public UserFoodItem findUserFoodItemById(Long userFoodItemId) {
 //        return userFoodItemRepository.findById(userFoodItemId)
 //                .orElseThrow(() -> new NotFoundException("Food Item", userFoodItemId));
@@ -68,10 +81,32 @@ public class OrderSystemService {
 //        );
 //    }
 
-//    public UserFoodOrderDTO getAllUserFoodOrder(String userId) {
-//        Iterable<UserOrder> userOrder = userOrderRepository.findAllUserOrdersByUserId(userId);
-//
-//        while(userOrder.iterator().hasNext()) {
+    public UserFoodOrderDTO getUserFoodOrderByUserOrderId(String userOrderId) {
+        UserOrder userOrder = findUserOrderById(userOrderId);
+        UserAddressDTO userAddressDTO = UserAddressMapper.fromEntityToDTO(userOrder.getUserAddress());
+        Iterable<UserFoodItem> userFoodItems = userFoodItemRepository.getAllUserFoodItemsByUserOrderId(userOrderId);
+
+        List<UserFoodItemDTO> userFoodItemDTOS = StreamSupport.stream(userFoodItems.spliterator(), false)
+                .map(userFoodItem -> {
+                    FoodItemVariationDTO foodItemVariationDTO = OrderSystemMapper.fromEntityToDTO(userFoodItem.getFoodItemVariation());
+                    return OrderSystemMapper.fromEntityToDTO(userFoodItem, foodItemVariationDTO);
+                })
+                .collect(Collectors.toList());
+
+        UserFoodOrderDTO userFoodOrderDTO = OrderSystemMapper.fromEntityToDTO(
+                userOrder,
+                userAddressDTO,
+                userFoodItemDTOS
+        );
+        return userFoodOrderDTO;
+
+    }
+
+//    public List<UserFoodOrderDTO> getAllUserFoodOrder(String userId) {
+//        Iterable<UserOrder> userOrders = userOrderRepository.findAllUserOrdersByUserId(userId);
+//        Iterator<UserOrder> iterator = userOrders.iterator();
+//        while(iterator.hasNext()) {
+//            UserOrder userOrder = iterator.next();
 //
 //        }
 //

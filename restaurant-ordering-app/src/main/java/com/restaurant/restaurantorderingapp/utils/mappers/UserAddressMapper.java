@@ -11,7 +11,6 @@ public class UserAddressMapper {
     public static UserAddressDTO fromEntityToDTO(UserAddress userAddress) {
         return new UserAddressDTO(
                 userAddress.getUserAddressId(),
-                userAddress.getUser().getUserId(),
                 userAddress.getPersonName(),
                 userAddress.getAddressName(),
                 userAddress.getCity(),

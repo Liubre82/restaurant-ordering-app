@@ -1,15 +1,13 @@
 package com.restaurant.restaurantorderingapp.controllers.orderSystemController;
 
 import com.restaurant.restaurantorderingapp.dto.orderSystemDto.CreateUserFoodOrderDTO;
+import com.restaurant.restaurantorderingapp.dto.orderSystemDto.UserFoodOrderDTO;
 import com.restaurant.restaurantorderingapp.services.orderSystemServices.OrderSystemService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class OrderSystemController {
@@ -19,6 +17,12 @@ public class OrderSystemController {
     @Autowired
     public OrderSystemController(OrderSystemService orderSystemService) {
         this.orderSystemService = orderSystemService;
+    }
+
+    @GetMapping("/authUsers/userOrders/{userOrderId}")
+    public ResponseEntity<UserFoodOrderDTO> getUserOrderById(@PathVariable String userOrderId) {
+        UserFoodOrderDTO userFoodOrderDTO = orderSystemService.getUserFoodOrderByUserOrderId(userOrderId);
+        return ResponseEntity.ok(userFoodOrderDTO);
     }
 
     @PostMapping("/authUsers/users/{userId}/userOrdersAndItems")

@@ -2,13 +2,14 @@ package com.restaurant.restaurantorderingapp.utils.mappers;
 
 import com.restaurant.restaurantorderingapp.dto.orderSystemDto.CreateUserFoodOrderDTO;
 import com.restaurant.restaurantorderingapp.dto.orderSystemDto.FoodItemVariationDTO;
+import com.restaurant.restaurantorderingapp.dto.orderSystemDto.UserFoodItemDTO;
 import com.restaurant.restaurantorderingapp.dto.orderSystemDto.UserFoodOrderDTO;
-import com.restaurant.restaurantorderingapp.dto.orderSystemDto.userFoodItemsDto.UserFoodItemDTO;
 import com.restaurant.restaurantorderingapp.dto.orderSystemDto.userOrdersDto.UserOrderDTO;
 import com.restaurant.restaurantorderingapp.dto.userAddressesDto.UserAddressDTO;
 import com.restaurant.restaurantorderingapp.models.food.FoodItemVariation;
 import com.restaurant.restaurantorderingapp.models.user.User;
 import com.restaurant.restaurantorderingapp.models.user.UserAddress;
+import com.restaurant.restaurantorderingapp.models.user.UserFoodItem;
 import com.restaurant.restaurantorderingapp.models.user.UserOrder;
 
 import java.time.format.DateTimeFormatter;
@@ -26,12 +27,21 @@ public class OrderSystemMapper {
         return new UserFoodOrderDTO(
                 userOrder.getUserOrderId(),
                 userAddressDTO,
-                foodOrders,
-                formattedDateTime,
                 userOrder.getSubtotal(),
                 userOrder.getTotalSalesTaxCost(),
                 userOrder.getTotalOrderCost(),
-                userOrder.getOrderNotes()
+                userOrder.getOrderNotes(),
+                formattedDateTime,
+                foodOrders
+        );
+    }
+
+    public static com.restaurant.restaurantorderingapp.dto.orderSystemDto.UserFoodItemDTO
+    fromEntityToDTO(UserFoodItem userFoodItem, FoodItemVariationDTO foodItemVariationDTO) {
+        return new com.restaurant.restaurantorderingapp.dto.orderSystemDto.UserFoodItemDTO(
+                userFoodItem.getUserFoodId(),
+                foodItemVariationDTO,
+                userFoodItem.getUserFoodItemQuantity()
         );
     }
 
