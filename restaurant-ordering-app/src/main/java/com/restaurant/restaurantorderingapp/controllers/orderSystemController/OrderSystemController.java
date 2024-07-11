@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class OrderSystemController {
 
@@ -23,6 +25,12 @@ public class OrderSystemController {
     public ResponseEntity<UserFoodOrderDTO> getUserOrderById(@PathVariable String userOrderId) {
         UserFoodOrderDTO userFoodOrderDTO = orderSystemService.getUserFoodOrderByUserOrderId(userOrderId);
         return ResponseEntity.ok(userFoodOrderDTO);
+    }
+
+    @GetMapping("/authUsers/users/{userId}/userOrders")
+    public ResponseEntity<List<UserFoodOrderDTO>> getAllUserOrdersByUserId(@PathVariable String userId) {
+        List<UserFoodOrderDTO> allUserFoodOrders= orderSystemService.getAllUserFoodOrder(userId);
+        return ResponseEntity.ok(allUserFoodOrders);
     }
 
     @PostMapping("/authUsers/users/{userId}/userOrdersAndItems")

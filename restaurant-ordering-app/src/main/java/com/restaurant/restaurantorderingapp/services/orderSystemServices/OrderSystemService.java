@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -102,16 +103,32 @@ public class OrderSystemService {
 
     }
 
-//    public List<UserFoodOrderDTO> getAllUserFoodOrder(String userId) {
-//        Iterable<UserOrder> userOrders = userOrderRepository.findAllUserOrdersByUserId(userId);
-//        Iterator<UserOrder> iterator = userOrders.iterator();
-//        while(iterator.hasNext()) {
-//            UserOrder userOrder = iterator.next();
-//
-//        }
-//
-//
-//    }
+    public List<UserFoodOrderDTO> getAllUserFoodOrder(String userId) {
+        Iterable<UserOrder> userOrders = userOrderRepository.findAllUserOrdersByUserId(userId);
+        Iterator<UserOrder> iterator = userOrders.iterator();
+        List<UserFoodOrderDTO> allUserFoodOrders = new ArrayList<>();
+        while(iterator.hasNext()) {
+            UserOrder userOrder = iterator.next();
+            UserAddressDTO userAddressDTO = UserAddressMapper.fromEntityToDTO(userOrder.getUserAddress());
+            Iterable<UserFoodItem> userFoodItems = userFoodItemRepository.getAllUserFoodItemsByUserOrderId(userOrder.getUserOrderId());
+
+            List<UserFoodItemDTO> userFoodItemDTOS = StreamSupport.stream(userFoodItems.spliterator(), false)
+                    .map(userFoodItem -> {
+                        FoodItemVariationDTO foodItemVariationDTO = OrderSystemMapper.fromEntityToDTO(userFoodItem.getFoodItemVariation());
+                        return OrderSystemMapper.fromEntityToDTO(userFoodItem, foodItemVariationDTO);
+                    })
+                    .collect(Collectors.toList());
+
+            UserFoodOrderDTO userFoodOrderDTO = OrderSystemMapper.fromEntityToDTO(
+                    userOrder,
+                    userAddressDTO,
+                    userFoodItemDTOS
+            );
+            allUserFoodOrders.add(userFoodOrderDTO);
+        }
+        return allUserFoodOrders;
+
+    }
 
 
     /**
