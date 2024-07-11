@@ -156,8 +156,8 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 [linkedIn-url]: https://www.linkedin.com/in/brent-liu-18a408196/
 [cicdImage]: https://firebasestorage.googleapis.com/v0/b/mern-real-estate-9a14b.appspot.com/o/SeedsImages%2FCICDPipeline(Restaurant-app).png?alt=media&token=4d42c95f-34c1-451a-a8bf-620d4e7aec4f
 [cicdImage-url]: https://firebasestorage.googleapis.com/v0/b/mern-real-estate-9a14b.appspot.com/o/SeedsImages%2FCICDPipeline(Restaurant-app).png?alt=media&token=4d42c95f-34c1-451a-a8bf-620d4e7aec4f
-[MySqlERD.com]: https://firebasestorage.googleapis.com/v0/b/mern-real-estate-9a14b.appspot.com/o/SeedsImages%2FMySql%20Schema%20ER%20Diagram-1.png?alt=media&token=77fca807-5d7d-41cd-9a2d-fad017baad18
-[MySqlERD-url]: https://firebasestorage.googleapis.com/v0/b/mern-real-estate-9a14b.appspot.com/o/SeedsImages%2FMySql%20Schema%20ER%20Diagram-1.png?alt=media&token=77fca807-5d7d-41cd-9a2d-fad017baad18
+[MySqlERD.com]: https://firebasestorage.googleapis.com/v0/b/mern-real-estate-9a14b.appspot.com/o/SeedsImages%2FMySql%20Schema%20ER%20Diagram-1.png?alt=media&token=ec5e1dbc-85db-409a-9e9b-50b222679a16
+[MySqlERD-url]: https://firebasestorage.googleapis.com/v0/b/mern-real-estate-9a14b.appspot.com/o/SeedsImages%2FMySql%20Schema%20ER%20Diagram-1.png?alt=media&token=ec5e1dbc-85db-409a-9e9b-50b222679a16
 
 [MySql.com]: https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white
 [MySql-url]: https://www.mysql.com/
